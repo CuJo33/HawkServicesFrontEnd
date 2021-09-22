@@ -1,0 +1,69 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+#logo {
+  border-radius: 42% 42%;
+  border: 3px solid rgb(3, 72, 161);
+}
+
+#navbar {
+  background-color: #68b3e9 !important;
+}
+
+#container-name {
+  margin-top: 5px;
+}
+
+#image {
+  max-width: 100px;
+  max-height: 50px;
+}
+
+#container-box {
+  min-width: 300px;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px,
+    rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px,
+    rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+  height: fit-content;
+  padding-bottom: 1px;
+  margin-bottom: 20px;
+}
+
+#branding-header {
+  margin-left: 1rem;
+  font-size: 3vh;
+}
+
+#clearlistlabel {
+  margin-left: 50px;
+}
+
+.itembuttons,
+#clear-button,
+.add-button,
+#remove-button {
+  margin-left: 3rem;
+}
+
+@media only screen and (max-width: 415px) {
+  #clearlistlabel {
+    margin-left: 0px;
+  }
+}
+
+@media only screen and (max-width: 415px) {
+  .itembuttons {
+    margin-left: 0rem !important;
+  }
+}
