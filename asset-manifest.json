@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/HawkServicesFrontEnd/static/css/main.74c7618b.chunk.css",
+    "main.js": "/HawkServicesFrontEnd/static/js/main.51a9154a.chunk.js",
+    "main.js.map": "/HawkServicesFrontEnd/static/js/main.51a9154a.chunk.js.map",
+    "runtime-main.js": "/HawkServicesFrontEnd/static/js/runtime-main.3441a2e1.js",
+    "runtime-main.js.map": "/HawkServicesFrontEnd/static/js/runtime-main.3441a2e1.js.map",
+    "static/css/2.818011ed.chunk.css": "/HawkServicesFrontEnd/static/css/2.818011ed.chunk.css",
+    "static/js/2.5b4a96d7.chunk.js": "/HawkServicesFrontEnd/static/js/2.5b4a96d7.chunk.js",
+    "static/js/2.5b4a96d7.chunk.js.map": "/HawkServicesFrontEnd/static/js/2.5b4a96d7.chunk.js.map",
+    "index.html": "/HawkServicesFrontEnd/index.html",
+    "static/css/2.818011ed.chunk.css.map": "/HawkServicesFrontEnd/static/css/2.818011ed.chunk.css.map",
+    "static/css/main.74c7618b.chunk.css.map": "/HawkServicesFrontEnd/static/css/main.74c7618b.chunk.css.map",
+    "static/js/2.5b4a96d7.chunk.js.LICENSE.txt": "/HawkServicesFrontEnd/static/js/2.5b4a96d7.chunk.js.LICENSE.txt",
+    "static/media/cujo_head.88802575.jpg": "/HawkServicesFrontEnd/static/media/cujo_head.88802575.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3441a2e1.js",
+    "static/css/2.818011ed.chunk.css",
+    "static/js/2.5b4a96d7.chunk.js",
+    "static/css/main.74c7618b.chunk.css",
+    "static/js/main.51a9154a.chunk.js"
+  ]
+}
