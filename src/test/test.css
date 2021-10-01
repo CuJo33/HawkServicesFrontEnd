@@ -1,0 +1,21 @@
+.test{
+    display: flex;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.test-right-container{
+    flex: 8;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+.test-title{
+    text-align: center;
+    padding: 10px;
+}
+.test-description{
+    padding: 10px;
+}

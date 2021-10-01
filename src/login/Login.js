@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import "./login.css"
 
 function Login(props) {
   const [disabled, cDisabled] = useState(false);
@@ -32,35 +31,33 @@ function Login(props) {
 
   return (
     <>
-      Login
+      
       <br />
-      <Form onSubmit={(e) => submitHandler(e)}>
-        username
-        <br />
+      <form className="login-form" onSubmit={(e) => submitHandler(e)}>
+      <h4>Login</h4> <br />
         <input
           onChange={(e) => onChange(e, cUser)}
           type="text"
           name="username"
           value={user}
-          disabled={disabled}
+          disabled={disabled} placeholder="Username.."
         />
-        <br />
-        password
-        <br />
+       
         <input
           onChange={(e) => onChange(e, cPassword)}
           type="password"
           name="password"
           value={password}
-          disabled={disabled}
+          disabled={disabled} placeholder="Password.."
         />
         <br />
         <br />
-        <Button type="submit" disabled={disabled}>
+        <button className="login-button" type="submit" disabled={disabled}>
           {" "}
           Submit{" "}
-        </Button>
-      </Form>
+        </button>
+        <br />
+      </form>
     </>
   );
 }
