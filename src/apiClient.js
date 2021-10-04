@@ -94,12 +94,13 @@ export class ApiClient {
     });
   }
 
-  async signUp(username, password) {
+  async signUp(username, email, password, type) {
     return await axios({
       method: "POST",
       url: `${url}Signup/${type}`,
       data: {
         username,
+        email,
         password,
       },
     });
