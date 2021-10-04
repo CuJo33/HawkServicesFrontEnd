@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Dashboard from "./Dashboard";
 import { ApiClient } from "./apiClient";
-import Login from "./login/Login";
-import Signup from "./signup/Signup";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Navbar from "./components/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
@@ -20,6 +20,7 @@ import Test from "./test/Test";
 import { ProtectedRoute } from "./protectedRoute/ProtectedRoute";
 import Footer from "./components/Footer";
 import About from "./pages/About";
+import Quotes from "./pages/Quotes";
 
 function App() {
   const [token, changeToken] = useState(window.localStorage.getItem("token"));
@@ -54,6 +55,9 @@ function App() {
           </Route>
           <Route exact path="/about">
             <About />
+          </Route>
+          <Route exact path="/quotes">
+            <Quotes />
           </Route>
           <Route path="/test">
             <Test />

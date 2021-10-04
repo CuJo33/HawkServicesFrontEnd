@@ -8,7 +8,6 @@
   justify-content: center;
   background: rgba(0, 128, 128, 0.993);
   z-index: 999;
-  margin-bottom: 50px;
 }
 .left-side {
   flex: 2;
@@ -22,7 +21,7 @@
   object-fit: cover;
 }
 .right-side {
-  flex: 10;
+  flex: 8;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,6 +38,26 @@ ul a {
 ul a:hover {
   border-bottom: 1px solid white;
   color: lightgray;
+}
+.login {
+  flex: 2;
+  justify-content: center;
+  align-items: center;
+}
+.list-login {
+  display: flexbox;
+  align-items: center;
+  justify-content: center;
+}
+.list-login a {
+  border: 1px solid lightgray;
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+.list-login a:hover {
+  background-color: white;
+  border: 1px solid teal;
+  color: teal;
 }
 .btn {
   display: none;

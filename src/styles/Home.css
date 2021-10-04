@@ -9,6 +9,7 @@
   background-size: cover;
   font-family: "Roboto", sans-serif;
   margin: auto;
+  opacity: 0.9;
 }
 
 .headerContainer {

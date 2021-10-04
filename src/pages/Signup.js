@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import "./signup.css";
+import "../styles/Signup.css";
 
 function SignUp(props) {
   const [disabled, cDisabled] = useState(false);
   const [user, cUser] = useState("");
   const [password, cPassword] = useState("");
-  const [email,cEmail]=useState("");
+  const [email, cEmail] = useState("");
 
   const onChange = (e, changer) => {
     e.preventDefault();
@@ -16,7 +16,11 @@ function SignUp(props) {
     e.preventDefault();
     cDisabled(true);
     props.client
-      .signUp(e.target.username.value,e.target.email.value,e.target.password.value)
+      .signUp(
+        e.target.username.value,
+        e.target.email.value,
+        e.target.password.value
+      )
       .then((response) => {
         if (response.data.status === 404) {
           throw new Error(response.data.message);
@@ -36,30 +40,33 @@ function SignUp(props) {
     <>
       <form className="signup-form" onSubmit={(e) => submitHandler(e)}>
         <br />
-      <h4>Sign Up</h4>
-      <br />
+        <h4>Sign Up</h4>
+        <br />
         <input
           onChange={(e) => onChange(e, cUser)}
           type="text"
           name="username"
           value={user}
-          disabled={disabled} placeholder="Username.."
+          disabled={disabled}
+          placeholder="Username.."
         />
-       
+
         <input
           onChange={(e) => onChange(e, cEmail)}
           type="email"
           name="email"
           value={email}
-          disabled={disabled} placeholder="Email.."
+          disabled={disabled}
+          placeholder="Email.."
         />
-       
+
         <input
           onChange={(e) => onChange(e, cPassword)}
           type="password"
           name="password"
           value={password}
-          disabled={disabled} placeholder="Password.."
+          disabled={disabled}
+          placeholder="Password.."
         />
         <br />
         <br />

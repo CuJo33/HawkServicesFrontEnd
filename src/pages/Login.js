@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./login.css"
+import "../styles/Login.css";
 
 function Login(props) {
   const [disabled, cDisabled] = useState(false);
@@ -31,24 +31,24 @@ function Login(props) {
 
   return (
     <>
-      
       <br />
       <form className="login-form" onSubmit={(e) => submitHandler(e)}>
-      <h4>Login</h4> <br />
+        <h4>Login</h4> <br />
         <input
           onChange={(e) => onChange(e, cUser)}
           type="text"
           name="username"
           value={user}
-          disabled={disabled} placeholder="Username.."
+          disabled={disabled}
+          placeholder="Username.."
         />
-       
         <input
           onChange={(e) => onChange(e, cPassword)}
           type="password"
           name="password"
           value={password}
-          disabled={disabled} placeholder="Password.."
+          disabled={disabled}
+          placeholder="Password.."
         />
         <br />
         <br />

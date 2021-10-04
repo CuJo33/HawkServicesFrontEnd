@@ -1,15 +1,15 @@
 .contact {
-  width: 100%;
-  height: 90vh;
   display: flex;
-  margin: auto;
+  align-items: center;
+  justify-content: center;
+  margin: 40px;
   margin-top: 70px;
+  width: 100%;
 }
 
 .contact .leftSide {
   height: 100%;
   flex: 50%;
-  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -22,6 +22,7 @@
   align-items: center;
   justify-content: flex-start;
   background-color: white;
+  padding-right: 100px;
 }
 
 .contact .rightSide h1 {
@@ -34,6 +35,7 @@
 }
 .contact .rightSide p {
   font-size: 18px;
+  padding: 20px;
 }
 
 @media screen and (max-width: 900px) {

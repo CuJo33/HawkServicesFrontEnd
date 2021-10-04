@@ -35,10 +35,11 @@ function Navbar() {
             <Link to="/services"> Services </Link>
             <Link to="/about"> About </Link>
             <Link to="/contact"> Contact </Link>
+            <Link to="/quotes"> Quotes </Link>
           </ul>
         )}
 
-        <button onClick={toggleNav} className="btn">
+        {/* <button onClick={toggleNav} className="btn">
           <ReorderIcon
             style={{
               color: "white",
@@ -47,7 +48,13 @@ function Navbar() {
               outline: "none",
             }}
           />
-        </button>
+        </button> */}
+      </div>
+      <div className="login">
+        <ul className="list-login">
+          <Link to="/login"> Login </Link>
+          <Link to="/signup"> Signup </Link>
+        </ul>
       </div>
     </div>
   );
