@@ -53,8 +53,7 @@ function Login(props) {
         <br />
         <br />
         <button className="login-button" type="submit" disabled={disabled}>
-          {" "}
-          Submit{" "}
+          Submit
         </button>
         <br />
       </form>

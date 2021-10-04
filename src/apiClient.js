@@ -7,6 +7,7 @@ export class ApiClient {
     this.logoutHandler = logoutHandler;
   }
 
+  // old work
   apiCall(method, url, data) {
     return axios({
       method,
@@ -25,6 +26,32 @@ export class ApiClient {
     });
   }
 
+  // space
+  // space
+  // space
+  // space
+  // space
+  // space
+  // space
+
+  // new work
+  getRooms(id) {
+    return this.apiCall("get", `${url}rooms/${id}`);
+  }
+
+  getServices(id) {
+    return this.apiCall("get", `${url}services/${id}`);
+  }
+
+  // space
+  // space
+  // space
+  // space
+  // space
+  // space
+  // space
+
+  // old work
   getEvents() {
     return this.apiCall("get", url);
   }
@@ -59,7 +86,7 @@ export class ApiClient {
   async login(username, password) {
     return await axios({
       method: "POST",
-      url: `${url}auth`,
+      url: `${url}login`,
       data: {
         username,
         password,
@@ -70,7 +97,7 @@ export class ApiClient {
   async signUp(username, password) {
     return await axios({
       method: "POST",
-      url: `${url}user`,
+      url: `${url}Signup/${type}`,
       data: {
         username,
         password,
