@@ -58,11 +58,11 @@ function App() {
             <About />
           </Route>
           <Route exact path="/quotes">
-            {token ? (
-              <Quotes client={client} />
-            ) : (
+            {/* {token ? ( */}
+            <Quotes client={client} token={token} />
+            {/* ) : (
               <Login loggedIn={(t) => login(t)} client={client}></Login>
-            )}
+            )} */}
           </Route>
           <Route exact path="/booking">
             <Booking />
