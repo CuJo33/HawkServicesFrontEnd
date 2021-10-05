@@ -6,7 +6,7 @@ function Booking(props) {
   const [current, cCurrent] = useState(undefined);
 
   const refreshBookings = (id) => {
-    props.client.getBookings("-1").then((response) => cBookings(response.data));
+    props.client.getBookings().then((response) => cBookings(response.data));
   };
 
   useEffect(() => {
@@ -24,14 +24,69 @@ function Booking(props) {
   return (
     <div>
       <h1>Booking</h1>
-      <label id="roomLabel" for="rooms">
+      {/* <label id="roomLabel" for="rooms">
         Choose a Room:
       </label>
       <select name="rooms" id="roomsSelect">
-        {returnRooms()}
-      </select>
+        {returnBookings()}
+      </select> */}
+      <form id="contact-form" method="POST">
+        <label className="label" htmlFor="firstName">
+          First Name
+        </label>
+        <input
+          name="firstName"
+          placeholder="Enter first name..."
+          type="text"
+          required
+        />
+        <label className="label" htmlFor="surname">
+          Surname
+        </label>
+        <input
+          name="surname"
+          placeholder="Enter surname..."
+          type="text"
+          required
+        />
+        <label className="label" htmlFor="name">
+          Telephone Number
+        </label>
+        <input
+          name="telephoneNumber"
+          placeholder="Enter telephone number..."
+          type="text"
+          required
+        />
+        <label className="label" htmlFor="email">
+          Address Line 1
+        </label>
+        <input
+          name="addressLine1"
+          placeholder="Enter your address..."
+          type="text"
+          required
+        />
+        <label className="label" htmlFor="message">
+          Address Line 2
+        </label>
+        <textarea
+          placeholder="Enter your address..."
+          name="addressLine2"
+          type="text"
+        ></textarea>
+        <label className="label" htmlFor="message">
+          PostCode
+        </label>
+        <textarea
+          placeholder="Enter your Postcode..."
+          name="postCode"
+          type="text"
+        ></textarea>
+        <button type="submit"> Book an Estimate</button>
+      </form>
     </div>
   );
 }
 
-export default Quotes;
+export default Booking;

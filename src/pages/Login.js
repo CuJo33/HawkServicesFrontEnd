@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/Login.css";
+import { useHistory } from "react-router-dom";
 
 function Login(props) {
   const [disabled, cDisabled] = useState(false);
@@ -10,7 +11,7 @@ function Login(props) {
     e.preventDefault();
     changer(e.target.value);
   };
-
+  const history = useHistory();
   const submitHandler = (e) => {
     e.preventDefault();
     cDisabled(true);
@@ -22,6 +23,7 @@ function Login(props) {
         }
         cDisabled(false);
         props.loggedIn(response.data.token);
+        history.push("/quotes");
       })
       .catch((e) => {
         alert(e);
