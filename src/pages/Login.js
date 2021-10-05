@@ -14,6 +14,7 @@ function Login(props) {
   };
   const history = useHistory();
   const submitHandler = (e) => {
+    console.log("running");
     e.preventDefault();
     cDisabled(true);
     props.client
@@ -55,11 +56,14 @@ function Login(props) {
         />
         <br />
         <br />
-        <button className="login-button" type="submit" disabled={disabled}>
-          Submit
-        </button>
+        <input
+          className="login-button"
+          type="submit"
+          disabled={disabled}
+          label="Submit"
+        ></input>
         <p>
-          If you dont have an account,{" "}
+          If you dont have an account,
           <Link to="/signup"> Please click here to register </Link>
         </p>
         <br />
