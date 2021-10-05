@@ -42,7 +42,7 @@ function App() {
   return (
     <>
       <Router>
-        <Navbar />
+        <Navbar token={token} />
         <Switch>
           <Route path="/" exact>
             <Home />
@@ -70,7 +70,7 @@ function App() {
             <Login loggedIn={(t) => login(t)} client={client}></Login>
           </Route>
           <Route path="/signup">
-            <Signup />
+            <Signup client={client} />
           </Route>
           <Route path="/test">
             {token ? (

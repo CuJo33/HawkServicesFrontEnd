@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "../styles/Signup.css";
 
 function SignUp(props) {
@@ -19,7 +20,8 @@ function SignUp(props) {
       .signUp(
         e.target.username.value,
         e.target.email.value,
-        e.target.password.value
+        e.target.password.value,
+        "client"
       )
       .then((response) => {
         if (response.data.status === 404) {
@@ -75,6 +77,10 @@ function SignUp(props) {
           Submit{" "}
         </button>
         <br />
+        <p>
+          If you already have an account{" "}
+          <Link to="/login"> please click here to login </Link>{" "}
+        </p>
       </form>
     </>
   );

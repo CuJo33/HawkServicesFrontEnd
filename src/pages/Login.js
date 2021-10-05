@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "../styles/Login.css";
 
 function Login(props) {
@@ -55,6 +56,10 @@ function Login(props) {
         <button className="login-button" type="submit" disabled={disabled}>
           Submit
         </button>
+        <p>
+          If you dont have an account,{" "}
+          <Link to="/signup"> Please click here to register </Link>
+        </p>
         <br />
       </form>
     </>

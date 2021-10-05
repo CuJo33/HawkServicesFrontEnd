@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import ReorderIcon from "@mui/icons-material/Reorder";
 import "../styles/Navbar.css";
 
-function Navbar() {
+function Navbar(props) {
   const [toggleMenu, setToggleMenu] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -23,6 +23,10 @@ function Navbar() {
       window.removeEventListener("resize", changeWidth);
     };
   }, []);
+  const logout = () => {
+    window.localStorage.removeItem("token");
+    // changeToken(undefined);
+  };
   return (
     <div className="nav-container">
       <div className="left-side">
@@ -50,12 +54,26 @@ function Navbar() {
           />
         </button> */}
       </div>
-      <div className="login">
+      {props.token ? (
+        <button
+          style={{
+            color: "white",
+            backgroundColor: "black",
+            borderRadius: "7px",
+          }}
+          onClick={logout()}
+        >
+          Logout
+        </button>
+      ) : (
+        <div> </div>
+      )}
+      {/* <div className="login">
         <ul className="list-login">
           <Link to="/login"> Login </Link>
           <Link to="/signup"> Signup </Link>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 }
