@@ -40,6 +40,7 @@ function Navbar(props) {
             <Link to="/about"> About </Link>
             <Link to="/contact"> Contact </Link>
             <Link to="/quotes"> Quotes </Link>
+            <Link to="/booking"> Booking </Link>
           </ul>
         )}
 

@@ -16,6 +16,7 @@ import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import Test from "./test/Test";
+import Booking from "./pages/Booking";
 
 import { ProtectedRoute } from "./protectedRoute/ProtectedRoute";
 import Footer from "./components/Footer";
@@ -62,6 +63,9 @@ function App() {
             ) : (
               <Login loggedIn={(t) => login(t)} client={client}></Login>
             )}
+          </Route>
+          <Route exact path="/booking">
+            <Booking />
           </Route>
           <Route path="/test">
             <Test />
