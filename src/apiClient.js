@@ -43,6 +43,18 @@ export class ApiClient {
     return this.apiCall("get", `${url}services/${id}`);
   }
 
+  createBooking(
+    requestDate,
+    firstName,
+    surname,
+    addressLine1,
+    addressLine2,
+    postCode,
+    telephoneNumber
+  ) {
+    return this.apiCall("post", `${url}booking`);
+  }
+
   // space
   // space
   // space
