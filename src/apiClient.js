@@ -44,6 +44,7 @@ export class ApiClient {
   }
 
   createBooking(
+    token,
     requestDate,
     firstName,
     surname,
@@ -53,6 +54,7 @@ export class ApiClient {
     telephoneNumber
   ) {
     return this.apiCall("post", `${url}booking`, {
+      token,
       requestDate,
       firstName,
       surname,
