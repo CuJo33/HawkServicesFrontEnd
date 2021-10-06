@@ -39,13 +39,10 @@ function App() {
   );
 
   const login = (t, c) => {
-    // console.log("t ", t);\
-    console.log(t, c);
     window.localStorage.setItem("authToken", t);
     window.localStorage.setItem("clientId", c);
     changeToken(t);
     cClientId(c);
-    // console.log(clientId);
   };
 
   const logout = () => {
@@ -80,7 +77,7 @@ function App() {
             )}
           </Route>
           <Route exact path="/booking">
-            <Booking />
+            <Booking client={client} token={token} clientId={clientId} />
           </Route>
           <Route path="/test">
             <Test />

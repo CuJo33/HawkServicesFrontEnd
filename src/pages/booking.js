@@ -27,14 +27,18 @@ function Booking(props) {
     // refreshBookings();
   }, []);
 
-  const changeDate = (date) => {
-    setDate(date);
+  const onChange = (e, changer) => {
+    e.preventDefault();
+    console.log(e.target.value);
     console.log(date);
+    changer(e.target.value);
   };
 
   const submitHandler = (e) => {
+    console.log("i am here");
     e.preventDefault();
     cDisabled(true);
+    console.log(e.target);
     props.client
       .createBooking(
         e.target.requestDate.value,
@@ -55,7 +59,6 @@ function Booking(props) {
       })
       .catch((e) => {
         alert(e);
-        console.log(e);
         cDisabled(false);
       });
   };
@@ -140,7 +143,8 @@ function Booking(props) {
                 name="requestDate"
                 type="date"
                 requestDate={date}
-                onChange={changeDate}
+                value={date}
+                onChange={(e) => onChange(e, setDate)}
                 required
               />
             </Form.Group>
@@ -150,7 +154,6 @@ function Booking(props) {
                 variant="success"
                 type="submit"
                 onSubmit={(e) => submitHandler(e)}
-                value={date}
               >
                 Book an Estimate
               </button>
