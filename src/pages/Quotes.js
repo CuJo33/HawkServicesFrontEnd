@@ -3,16 +3,27 @@ import "../styles/Quotes.css";
 import Table from "react-bootstrap/Table";
 
 function Quotes(props) {
+  const [disabled, cDisabled] = useState(false);
   const [jobs, cJobs] = useState([]);
   const [rooms, cRooms] = useState([]);
   const [services, cServices] = useState([]);
+  const [formService, cFormService] = useState();
+  const [formRoom, cFormRoom] = useState();
 
+  console.log(props);
   const refreshServices = (id) => {
-    props.client.getServices("-1").then((response) => cServices(response.data));
+    props.client.getServices("-1").then((response) => {
+      cFormService(response.data[0].fullServiceName);
+      cServices(response.data);
+    });
   };
 
   const refreshRooms = () => {
-    props.client.getRooms("-1").then((response) => cRooms(response.data));
+    props.client.getRooms("-1").then((response) => {
+      cFormRoom(response.data[0].fullRoomName);
+
+      cRooms(response.data);
+    });
   };
 
   useEffect(() => {
@@ -23,7 +34,9 @@ function Quotes(props) {
   const returnRooms = () => {
     return rooms.map((current) => {
       return (
-        <option value={current.fullRoomName}>{current.fullRoomName}</option>
+        <option value={current.roomId} name={current.fullRoomName}>
+          {current.fullRoomName}
+        </option>
       );
     });
   };
@@ -31,7 +44,7 @@ function Quotes(props) {
   const returnServices = () => {
     return services.map((current) => {
       return (
-        <option value={current.fullServiceName}>
+        <option value={current.serviceId} name={current.fullServiceName}>
           {current.fullServiceName}
         </option>
       );
@@ -40,13 +53,52 @@ function Quotes(props) {
 
   const createJob = (e) => {
     e.preventDefault();
-    const add = {
-      room: e.target.rooms.value,
-      service: e.target.services.value,
-    };
-    cJobs((p) => {
-      return [...p, add];
-    });
+    // console.log("add ", add);
+
+    props.client
+      .createJob(props.clientId, e.target.rooms.value, e.target.services.value)
+      .then((response) => {
+        if (response.data.status === 404) {
+          throw new Error(response.data.message);
+        } else if (response.data.status === 200) {
+          // alert("Job created");
+        }
+        cDisabled(false);
+        cJobs((p) => {
+          return [
+            ...p,
+            {
+              jobId: response.data.jobId,
+              room: formRoom,
+              service: formService,
+            },
+          ];
+        });
+      })
+      .catch((e) => {
+        alert(e);
+        cDisabled(false);
+      });
+  };
+  const handleChange = (e, arg) => {
+    e.preventDefault();
+    const target = e.target.value;
+    if (arg === "rooms") {
+      rooms.map((c) => {
+        console.log(c);
+        if (c.roomId === target) {
+          cFormRoom(c.fullRoomName);
+        }
+      });
+    }
+    if (arg === "services") {
+      services.map((c) => {
+        console.log(c);
+        if (c.serviceId === target) {
+          cFormService(c.fullServiceName);
+        }
+      });
+    }
   };
 
   return (
@@ -62,9 +114,9 @@ function Quotes(props) {
           </tr>
         </thead>
         <tbody>
-          {jobs.map((current) => {
+          {jobs.map((current, index) => {
             return (
-              <tr>
+              <tr key={index}>
                 <td>{current.room}</td>
                 <td>{current.service}</td>
                 <td></td>
@@ -78,16 +130,16 @@ function Quotes(props) {
       <h2>Add a Job</h2>
       <form onSubmit={(e) => createJob(e)}>
         {/* map over state array to display all the jobs in the current quote. */}
-        <label id="roomLabel" for="rooms">
+        <label id="roomLabel" htmlFor="rooms">
           Choose a Room:
         </label>
-        <select name="rooms" id="roomsSelect">
+        <select id="rooms" onChange={(e) => handleChange(e, "rooms")}>
           {returnRooms()}
         </select>
-        <label id="serviceLabel" for="services">
+        <label id="serviceLabel" htmlFor="services">
           Choose a Service:
         </label>
-        <select name="services" id="serviceSelect">
+        <select id="services" onChange={(e) => handleChange(e, "services")}>
           {returnServices()}
         </select>
         <input type="submit" label="Create Job"></input>

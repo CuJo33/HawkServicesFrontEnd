@@ -52,7 +52,19 @@ export class ApiClient {
     postCode,
     telephoneNumber
   ) {
-    return this.apiCall("post", `${url}booking`);
+    return this.apiCall("post", `${url}booking`, {
+      requestDate,
+      firstName,
+      surname,
+      addressLine1,
+      addressLine2,
+      postCode,
+      telephoneNumber,
+    });
+  }
+
+  createJob(clientId, roomId, serviceId) {
+    return this.apiCall("post", `${url}Job`, { clientId, roomId, serviceId });
   }
 
   // space

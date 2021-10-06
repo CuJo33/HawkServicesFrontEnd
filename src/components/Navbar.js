@@ -3,6 +3,7 @@ import Logo from "../assets/hawk.png";
 import { Link } from "react-router-dom";
 import ReorderIcon from "@mui/icons-material/Reorder";
 import "../styles/Navbar.css";
+import { useHistory } from "react-router-dom";
 
 function Navbar(props) {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -23,8 +24,11 @@ function Navbar(props) {
       window.removeEventListener("resize", changeWidth);
     };
   }, []);
+
+  const history = useHistory();
   const logout = () => {
-    window.localStorage.removeItem("token");
+    history.push("/login");
+    props.logout();
     // changeToken(undefined);
   };
   return (
@@ -62,7 +66,7 @@ function Navbar(props) {
             backgroundColor: "black",
             borderRadius: "7px",
           }}
-          onClick={logout()}
+          onClick={() => logout()}
         >
           Logout
         </button>

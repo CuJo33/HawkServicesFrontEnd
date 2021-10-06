@@ -24,26 +24,41 @@ import About from "./pages/About";
 import Quotes from "./pages/Quotes";
 
 function App() {
-  const [token, changeToken] = useState(window.localStorage.getItem("token"));
+  const [token, changeToken] = useState(
+    window.localStorage.getItem("authToken")
+  );
+  const [clientId, cClientId] = useState(
+    window.localStorage.getItem("clientId")
+  );
+  // const [employeeId, cEmployeeId] = useState(
+  //   window.localStorage.getItem("employeeId")
+  // );
   const client = new ApiClient(
     () => token,
     () => logout()
   );
 
-  const login = (t) => {
-    window.localStorage.setItem("token", t);
+  const login = (t, c) => {
+    // console.log("t ", t);\
+    console.log(t, c);
+    window.localStorage.setItem("authToken", t);
+    window.localStorage.setItem("clientId", c);
     changeToken(t);
+    cClientId(c);
+    // console.log(clientId);
   };
 
   const logout = () => {
-    window.localStorage.removeItem("token");
-    // changeToken(undefined);
+    window.localStorage.removeItem("authToken");
+    window.localStorage.removeItem("clientId");
+    changeToken(undefined);
+    cClientId(undefined);
   };
 
   return (
     <>
       <Router>
-        <Navbar token={token} />
+        <Navbar token={token} logout={logout} />
         <Switch>
           <Route path="/" exact>
             <Home />
@@ -58,11 +73,11 @@ function App() {
             <About />
           </Route>
           <Route exact path="/quotes">
-            {/* {token ? ( */}
-            <Quotes client={client} token={token} />
-            {/* ) : (
-              <Login loggedIn={(t) => login(t)} client={client}></Login>
-            )} */}
+            {token ? (
+              <Quotes client={client} token={token} clientId={clientId} />
+            ) : (
+              <Login loggedIn={(t, c) => login(t, c)} client={client}></Login>
+            )}
           </Route>
           <Route exact path="/booking">
             <Booking />
@@ -71,7 +86,7 @@ function App() {
             <Test />
           </Route>
           <Route path="/login">
-            <Login loggedIn={(t) => login(t)} client={client}></Login>
+            <Login loggedIn={(t, c) => login(t, c)} client={client}></Login>
           </Route>
           <Route path="/signup">
             <Signup client={client} />
@@ -83,7 +98,10 @@ function App() {
               <Container>
                 <Row>
                   <Col>
-                    <Login loggedIn={(t) => login(t)} client={client}></Login>
+                    <Login
+                      loggedIn={(t, c) => login(t, c)}
+                      client={client}
+                    ></Login>
                   </Col>
                   <Col>
                     <Signup client={client} />
