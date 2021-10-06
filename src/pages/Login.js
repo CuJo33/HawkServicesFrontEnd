@@ -12,9 +12,10 @@ function Login(props) {
     e.preventDefault();
     changer(e.target.value);
   };
+
   const history = useHistory();
+
   const submitHandler = (e) => {
-    console.log("running");
     e.preventDefault();
     cDisabled(true);
     props.client
@@ -24,7 +25,7 @@ function Login(props) {
           throw new Error(response.data.message);
         }
         cDisabled(false);
-        props.loggedIn(response.data.token);
+        props.loggedIn(response.data.token, response.data.clientId);
         history.push("/quotes");
       })
       .catch((e) => {
@@ -62,6 +63,7 @@ function Login(props) {
           disabled={disabled}
           label="Submit"
         ></input>
+        <br />
         <p>
           If you dont have an account,
           <Link to="/signup"> Please click here to register </Link>
