@@ -4,12 +4,21 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
 import Calendar from "react-calendar";
+import "date-fns";
+import Grid from "@mui/material/Grid";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 
 function Booking(props) {
   const [disabled, cDisabled] = useState(false);
   const [bookings, cBookings] = useState([]);
   const [current, cCurrent] = useState(undefined);
-  const [date, setDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(new Date());
 
   // const refreshBookings = (id) => {
   //   props.client.getBookings().then((response) => cBookings(response.data));
@@ -21,17 +30,52 @@ function Booking(props) {
   //       <option value={current.serviceName}>{current.fullServiceName}</option>
   //     );
   //   });
-  // };
+  // };\
+  let roundTime = (time, minutesToRound) => {
+    let [hours, minutes] = time.split(":");
+    hours = parseInt(hours);
+    minutes = parseInt(minutes);
+
+    // Convert hours and minutes to time in minutes
+    time = hours * 60 + minutes;
+
+    let rounded = Math.round(time / minutesToRound) * minutesToRound;
+    let rHr = "" + Math.floor(rounded / 60);
+    let rMin = "" + (rounded % 60);
+    let test = [rHr.padStart(2, "0"), rMin.padStart(2, "0")];
+    return test;
+  };
 
   useEffect(() => {
+    const current = new Date();
     // refreshBookings();
-  }, []);
+    const now = `${selectedDate.getHours()}:${selectedDate.getMinutes()}`;
+    const rounded = roundTime(now, 15);
+    console.log("now", rounded);
+    console.log(current, "current");
+    const updated = [
+      current.getFullYear(),
+      current.getMonth(),
+      current.getDate(),
+      rounded,
+    ];
+    const updated2 = new Date(
+      current.getFullYear(),
+      current.getMonth(),
+      current.getDate(),
+      rounded[0],
+      rounded[1]
+    );
+    console.log(updated2, rounded);
+    // console.log("parsed", Date.parse(rounded));
+    setSelectedTime(updated2);
+  });
 
-  const onChange = (e, changer) => {
-    e.preventDefault();
-    console.log(e.target.value);
-    console.log(date);
-    changer(e.target.value);
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+  const handleTimeChange = (time) => {
+    setSelectedTime(time);
   };
 
   const submitHandler = (e) => {
@@ -41,7 +85,8 @@ function Booking(props) {
     console.log(e.target);
     props.client
       .createBooking(
-        e.target.requestDate.value,
+        e.target.selectedDate.value,
+        e.target.selectedTime.value,
         e.target.firstName.value,
         e.target.surname.value,
         e.target.addressLine1.value,
@@ -138,15 +183,44 @@ function Booking(props) {
             </Form.Group>
             <Form.Group as={Col} controlId="formGridDate">
               <Form.Label> Date for estimate</Form.Label>
-              <input
-                className="form-control"
-                name="requestDate"
-                type="date"
-                requestDate={date}
-                value={date}
-                onChange={(e) => onChange(e, setDate)}
-                required
-              />
+              <MuiPickersUtilsProvider
+                utils={DateFnsUtils}
+                className="date-picker"
+              >
+                <Grid container justify="space-around">
+                  <KeyboardDatePicker
+                    name="selectedDate"
+                    variant="dialog"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="date-picker"
+                    disablePast
+                    Color="teal"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    KeyboardButtonProps={{ "aria-label": "change date" }}
+                  />
+                </Grid>
+              </MuiPickersUtilsProvider>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGridDate">
+              <Form.Label> Time for estimate</Form.Label>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <Grid>
+                  <KeyboardTimePicker
+                    // disableToolbar///////////////////////////////////////
+                    placeholder="Choose the time"
+                    name="selectedTime"
+                    margin="normal"
+                    orientation="portrait"
+                    id="time-picker"
+                    value={selectedTime}
+                    minutesStep={15}
+                    onChange={handleTimeChange}
+                    KeyboardButtonProps={{ "aria-label": "change time" }}
+                  />
+                </Grid>
+              </MuiPickersUtilsProvider>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridButton">
               <button

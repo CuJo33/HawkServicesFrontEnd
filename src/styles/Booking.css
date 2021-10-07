@@ -25,3 +25,7 @@ h2 {
   background-color: rgb(82, 161, 161);
   border: 1px solid teal;
 }
+.date-picker {
+  background-color: teal !important;
+  color: rebeccapurple;
+}
