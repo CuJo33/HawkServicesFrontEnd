@@ -9,8 +9,8 @@ function Quotes(props) {
   const [services, cServices] = useState([]);
   const [formService, cFormService] = useState();
   const [formRoom, cFormRoom] = useState();
+  const [clicked, cClicked] = useState(false);
 
-  console.log(props);
   const refreshServices = (id) => {
     props.client.getServices("-1").then((response) => {
       cFormService(response.data[0].fullServiceName);
@@ -32,9 +32,9 @@ function Quotes(props) {
   }, []);
 
   const returnRooms = () => {
-    return rooms.map((current) => {
+    return rooms.map((current, index) => {
       return (
-        <option value={current.roomId} name={current.fullRoomName}>
+        <option key={index} value={current.roomId} name={current.fullRoomName}>
           {current.fullRoomName}
         </option>
       );
@@ -42,12 +42,27 @@ function Quotes(props) {
   };
 
   const returnServices = () => {
-    return services.map((current) => {
+    return services.map((current, index) => {
       return (
-        <option value={current.serviceId} name={current.fullServiceName}>
+        <option
+          key={index}
+          value={current.serviceId}
+          name={current.fullServiceName}
+        >
           {current.fullServiceName}
         </option>
       );
+    });
+  };
+
+  const deleteJobHandler = (e, jobId) => {
+    e.preventDefault();
+    props.client.deleteJob(jobId);
+    cJobs((p) => {
+      const newArray = p.filter((i) => {
+        return i.jobId != jobId;
+      });
+      return newArray;
     });
   };
 
@@ -85,7 +100,6 @@ function Quotes(props) {
     const target = e.target.value;
     if (arg === "rooms") {
       rooms.map((c) => {
-        console.log(c);
         if (c.roomId === target) {
           cFormRoom(c.fullRoomName);
         }
@@ -93,7 +107,6 @@ function Quotes(props) {
     }
     if (arg === "services") {
       services.map((c) => {
-        console.log(c);
         if (c.serviceId === target) {
           cFormService(c.fullServiceName);
         }
@@ -119,6 +132,10 @@ function Quotes(props) {
               <tr key={index}>
                 <td>{current.room}</td>
                 <td>{current.service}</td>
+                <td>{current.jobId}</td>
+                <button onClick={(e) => deleteJobHandler(e, current.jobId)}>
+                  Delete Job
+                </button>
                 <td></td>
               </tr>
             );
@@ -144,11 +161,8 @@ function Quotes(props) {
         </select>
         <input type="submit" label="Create Job"></input>
       </form>
+
       {/* <button type="submit" onSubmit={(e) => submitHandler(e)}>
-        Create another job 
-      </button>
-    
-<button type="submit" onSubmit={(e) => submitHandler(e)}>
         Submit quote
       </button> */}
     </div>

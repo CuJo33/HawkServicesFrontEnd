@@ -66,7 +66,11 @@ export class ApiClient {
   }
 
   createJob(clientId, roomId, serviceId) {
-    return this.apiCall("post", `${url}Job`, { clientId, roomId, serviceId });
+    return this.apiCall("post", `${url}job`, { clientId, roomId, serviceId });
+  }
+
+  deleteJob(jobId) {
+    return this.apiCall("delete", `${url}job/${jobId}`);
   }
 
   // space
