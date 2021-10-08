@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 import { ApiClient } from "./apiClient";
 import Login from "./pages/Login";
@@ -30,6 +30,9 @@ function App() {
   const [clientId, cClientId] = useState(
     window.localStorage.getItem("clientId")
   );
+  const [employeeId, cEmployeeId] = useState(
+    window.localStorage.getItem("employeeId")
+  );
   // const [employeeId, cEmployeeId] = useState(
   //   window.localStorage.getItem("employeeId")
   // );
@@ -37,6 +40,23 @@ function App() {
     () => token,
     () => logout()
   );
+
+  // need to remove this later - it's here because we don't have a employee login page
+  useEffect(() => {
+    cEmployeeId("614dab91d76d0c1576f8b9e5");
+  }, []);
+
+  // need to make an employeeId version of the login
+  // need to make an employeeId version of the login
+  // need to make an employeeId version of the login
+  // need to make an employeeId version of the login
+  // need to make an employeeId version of the login
+  // need to make an employeeId version of the login
+  // need to make an employeeId version of the login
+  // need to make an employeeId version of the login
+  // need to make an employeeId version of the login
+  // need to make an employeeId version of the login
+  // need to make an employeeId version of the login
 
   const login = (t, c) => {
     window.localStorage.setItem("authToken", t);
@@ -48,8 +68,10 @@ function App() {
   const logout = () => {
     window.localStorage.removeItem("authToken");
     window.localStorage.removeItem("clientId");
+    window.localStorage.removeItem("employeeId");
     changeToken(undefined);
     cClientId(undefined);
+    cEmployeeId(undefined);
   };
 
   return (
@@ -71,7 +93,12 @@ function App() {
           </Route>
           <Route exact path="/quotes">
             {token ? (
-              <Quotes client={client} token={token} clientId={clientId} />
+              <Quotes
+                client={client}
+                token={token}
+                employeeId={employeeId}
+                clientId={clientId}
+              />
             ) : (
               <Login loggedIn={(t, c) => login(t, c)} client={client}></Login>
             )}

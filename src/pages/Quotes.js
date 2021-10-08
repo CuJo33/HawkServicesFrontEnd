@@ -68,8 +68,6 @@ function Quotes(props) {
 
   const createJob = (e) => {
     e.preventDefault();
-    // console.log("add ", add);
-
     props.client
       .createJob(props.clientId, e.target.rooms.value, e.target.services.value)
       .then((response) => {
@@ -95,6 +93,7 @@ function Quotes(props) {
         cDisabled(false);
       });
   };
+
   const handleChange = (e, arg) => {
     e.preventDefault();
     const target = e.target.value;
@@ -112,6 +111,29 @@ function Quotes(props) {
         }
       });
     }
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    const jobList = [];
+    jobs.map((j) => {
+      jobList.push(j.jobId);
+    });
+    console.log(props.clientId, props.employeeId, jobList);
+    props.client
+      .createQuote(props.clientId, props.employeeId, jobList)
+      .then((response) => {
+        if (response.data.status === 404) {
+          throw new Error(response.data.message);
+        } else if (response.data.status === 200) {
+          // alert("Quote created");
+        }
+        cDisabled(false);
+      })
+      .catch((e) => {
+        alert(e);
+        cDisabled(false);
+      });
   };
 
   return (
@@ -162,9 +184,9 @@ function Quotes(props) {
         <input type="submit" label="Create Job"></input>
       </form>
 
-      {/* <button type="submit" onSubmit={(e) => submitHandler(e)}>
-        Submit quote
-      </button> */}
+      <button type="submit" onClick={(e) => submitHandler(e)}>
+        Submit Quote
+      </button>
     </div>
   );
 }

@@ -73,6 +73,14 @@ export class ApiClient {
     return this.apiCall("delete", `${url}job/${jobId}`);
   }
 
+  createQuote(clientId, employeeId, jobList) {
+    return this.apiCall("post", `${url}quote`, {
+      clientId,
+      employeeId,
+      jobList,
+    });
+  }
+
   // space
   // space
   // space
