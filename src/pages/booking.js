@@ -5,14 +5,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
 import Calendar from "react-calendar";
 import { useHistory } from "react-router-dom";
-import "date-fns";
-import Grid from "@mui/material/Grid";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
 
 function Booking(props) {
   const [disabled, cDisabled] = useState(false);
@@ -25,8 +17,6 @@ function Booking(props) {
   const [addressLine2, cAddressLine2] = useState(undefined);
   const [postCode, cPostCode] = useState(undefined);
   const [telephoneNumber, cTelephoneNumber] = useState(undefined);
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(new Date());
 
   // const refreshBookings = (id) => {
   //   props.client.getBookings().then((response) => cBookings(response.data));
@@ -50,12 +40,6 @@ function Booking(props) {
   };
 
   const history = useHistory();
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-  const handleTimeChange = (time) => {
-    setSelectedTime(time);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -188,52 +172,14 @@ function Booking(props) {
             </Form.Group>
             <Form.Group as={Col} controlId="formGridDate">
               <Form.Label> Date for estimate</Form.Label>
-              {/* <input
+              <input
                 className="form-control"
                 name="requestDate"
                 type="date"
                 value={date}
                 onChange={(e) => onChange(e, cDate)}
                 required
-              /> */}
-                <MuiPickersUtilsProvider
-                utils={DateFnsUtils}
-                className="date-picker"
-              >
-                <Grid container justify="space-around">
-                  <KeyboardDatePicker
-                    name="selectedDate"
-                    variant="dialog"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="date-picker"
-                    disablePast
-                    Color="teal"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    KeyboardButtonProps={{ "aria-label": "change date" }}
-                  />
-                </Grid>
-              </MuiPickersUtilsProvider>
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridDate">
-              <Form.Label> Time for estimate</Form.Label>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <Grid>
-                  <KeyboardTimePicker
-                    // disableToolbar///////////////////////////////////////
-                    placeholder="Choose the time"
-                    name="selectedTime"
-                    margin="normal"
-                    orientation="portrait"
-                    id="time-picker"
-                    value={selectedTime}
-                    minutesStep={15}
-                    onChange={handleTimeChange}
-                    KeyboardButtonProps={{ "aria-label": "change time" }}
-                  />
-                </Grid>
-              </MuiPickersUtilsProvider>
+              />
             </Form.Group>
             <Form.Group as={Col} controlId="formGridButton">
               <input
