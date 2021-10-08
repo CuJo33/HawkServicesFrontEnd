@@ -38,15 +38,58 @@ function Booking(props) {
   //       <option value={current.serviceName}>{current.fullServiceName}</option>
   //     );
   //   });
-  // };
+  // };\
+  let roundTime = (time, minutesToRound) => {
+    let [hours, minutes] = time.split(":");
+    hours = parseInt(hours);
+    minutes = parseInt(minutes);
+
+    // Convert hours and minutes to time in minutes
+    time = hours * 60 + minutes;
+
+    let rounded = Math.round(time / minutesToRound) * minutesToRound;
+    let rHr = "" + Math.floor(rounded / 60);
+    let rMin = "" + (rounded % 60);
+    let test = [rHr.padStart(2, "0"), rMin.padStart(2, "0")];
+    return test;
+  };
 
   useEffect(() => {
+    const current = new Date();
     // refreshBookings();
-  }, []);
+    const now = `${selectedDate.getHours()}:${selectedDate.getMinutes()}`;
+    const rounded = roundTime(now, 15);
+    console.log("now", rounded);
+    console.log(current, "current");
+    const updated = [
+      current.getFullYear(),
+      current.getMonth(),
+      current.getDate(),
+      rounded,
+    ];
+    const updated2 = new Date(
+      current.getFullYear(),
+      current.getMonth(),
+      current.getDate(),
+      rounded[0],
+      rounded[1]
+    );
+    console.log(updated2, rounded);
+    // console.log("parsed", Date.parse(rounded));
+    setSelectedTime(updated2);
+  });
+
 
   const onChange = (e, changer) => {
     e.preventDefault();
     changer(e.target.value);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+  const handleTimeChange = (time) => {
+    setSelectedTime(time);
+
   };
 
   const history = useHistory();
@@ -197,6 +240,7 @@ function Booking(props) {
                 onChange={(e) => onChange(e, cDate)}
                 required
               /> */}
+
               <MuiPickersUtilsProvider
                 utils={DateFnsUtils}
                 className="date-picker"
