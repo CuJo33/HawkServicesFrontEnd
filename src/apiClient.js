@@ -44,6 +44,7 @@ export class ApiClient {
   }
 
   createBooking(
+    token,
     requestDate,
     firstName,
     surname,
@@ -53,6 +54,7 @@ export class ApiClient {
     telephoneNumber
   ) {
     return this.apiCall("post", `${url}booking`, {
+      token,
       requestDate,
       firstName,
       surname,
@@ -64,7 +66,19 @@ export class ApiClient {
   }
 
   createJob(clientId, roomId, serviceId) {
-    return this.apiCall("post", `${url}Job`, { clientId, roomId, serviceId });
+    return this.apiCall("post", `${url}job`, { clientId, roomId, serviceId });
+  }
+
+  deleteJob(jobId) {
+    return this.apiCall("delete", `${url}job/${jobId}`);
+  }
+
+  createQuote(clientId, employeeId, jobList) {
+    return this.apiCall("post", `${url}quote`, {
+      clientId,
+      employeeId,
+      jobList,
+    });
   }
 
   // space

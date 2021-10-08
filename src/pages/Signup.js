@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Signup.css";
+import { useHistory } from "react-router-dom";
 
 function SignUp(props) {
   const [disabled, cDisabled] = useState(false);
@@ -12,6 +13,8 @@ function SignUp(props) {
     e.preventDefault();
     changer(e.target.value);
   };
+
+  const history = useHistory();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -30,6 +33,7 @@ function SignUp(props) {
           alert(response.data.message + " Please now login");
         }
         cDisabled(false);
+        history.push("/login");
       })
       .catch((e) => {
         alert(e);

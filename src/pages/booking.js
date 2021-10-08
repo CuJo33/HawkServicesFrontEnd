@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
 import Calendar from "react-calendar";
+import { useHistory } from "react-router-dom";
 import "date-fns";
 import Grid from "@mui/material/Grid";
 import DateFnsUtils from "@date-io/date-fns";
@@ -17,6 +18,13 @@ function Booking(props) {
   const [disabled, cDisabled] = useState(false);
   const [bookings, cBookings] = useState([]);
   const [current, cCurrent] = useState(undefined);
+  const [date, cDate] = useState(new Date());
+  const [firstName, cFirstName] = useState(undefined);
+  const [surname, cSurname] = useState(undefined);
+  const [addressLine1, cAddressLine1] = useState(undefined);
+  const [addressLine2, cAddressLine2] = useState(undefined);
+  const [postCode, cPostCode] = useState(undefined);
+  const [telephoneNumber, cTelephoneNumber] = useState(undefined);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
 
@@ -71,6 +79,21 @@ function Booking(props) {
     setSelectedTime(updated2);
   });
 
+
+  const onChange = (e, changer) => {
+    e.preventDefault();
+    changer(e.target.value);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+  const handleTimeChange = (time) => {
+    setSelectedTime(time);
+
+  };
+
+  const history = useHistory();
+
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
@@ -79,28 +102,38 @@ function Booking(props) {
   };
 
   const submitHandler = (e) => {
-    console.log("i am here");
     e.preventDefault();
+    console.log("i am here");
+    console.log(
+      props.token,
+      date,
+      firstName,
+      surname,
+      addressLine1,
+      addressLine2,
+      telephoneNumber,
+      postCode
+    );
     cDisabled(true);
-    console.log(e.target);
     props.client
       .createBooking(
-        e.target.selectedDate.value,
-        e.target.selectedTime.value,
-        e.target.firstName.value,
-        e.target.surname.value,
-        e.target.addressLine1.value,
-        e.target.addressLine2.value,
-        e.target.postCode.value,
-        e.target.telephonNumber.value
+        props.token,
+        date,
+        firstName,
+        surname,
+        addressLine1,
+        addressLine2,
+        postCode,
+        telephoneNumber
       )
       .then((response) => {
         if (response.data.status === 404) {
           throw new Error(response.data.message);
-        } else if (response.data.status === 200) {
-          alert("Booking created");
         }
+        alert("Booking created");
         cDisabled(false);
+        // need to have a page that the cleint Goes to after making a booking
+        // history.push("/quotes");
       })
       .catch((e) => {
         alert(e);
@@ -116,8 +149,12 @@ function Booking(props) {
       <select name="rooms" id="roomsSelect">
         {returnBookings()}
       </select> */}
-
-      <Form className="mx-auto" id="contact-form" method="POST">
+      <Form
+        onSubmit={(e) => submitHandler(e)}
+        className="mx-auto"
+        id="contact-form"
+        method="POST"
+      >
         <Container className="container-booking mx-auto">
           <br /> <br />
           <Row className="mb-3 form-row">
@@ -133,6 +170,8 @@ function Booking(props) {
                 type="text"
                 placeholder="Enter Firstname.."
                 required
+                value={firstName}
+                onChange={(e) => onChange(e, cFirstName)}
               />
             </Form.Group>
             <Form.Group as={Col} controlId="formGridsurname">
@@ -142,6 +181,8 @@ function Booking(props) {
                 type="text"
                 placeholder="Enter Surname.."
                 required
+                value={surname}
+                onChange={(e) => onChange(e, cSurname)}
               />
             </Form.Group>
 
@@ -152,6 +193,8 @@ function Booking(props) {
                 type="text"
                 placeholder="Enter Telephone number.."
                 required
+                value={telephoneNumber}
+                onChange={(e) => onChange(e, cTelephoneNumber)}
               />
             </Form.Group>
           </Row>
@@ -162,6 +205,8 @@ function Booking(props) {
                 name="addressLine1"
                 placeholder="Enter your address.."
                 required
+                value={addressLine1}
+                onChange={(e) => onChange(e, cAddressLine1)}
               />
             </Form.Group>
             <Form.Group as={Col} className="mb-3" controlId="formGridAddress2">
@@ -170,6 +215,8 @@ function Booking(props) {
                 as="textarea"
                 name="addressLine2"
                 placeholder="Enter your address.."
+                value={addressLine2}
+                onChange={(e) => onChange(e, cAddressLine2)}
               />
             </Form.Group>
           </Row>
@@ -179,10 +226,21 @@ function Booking(props) {
               <Form.Control
                 name="postCode"
                 placeholder="Enter your Postcode..."
+                value={postCode}
+                onChange={(e) => onChange(e, cPostCode)}
               />
             </Form.Group>
             <Form.Group as={Col} controlId="formGridDate">
               <Form.Label> Date for estimate</Form.Label>
+              {/* <input
+                className="form-control"
+                name="requestDate"
+                type="date"
+                value={date}
+                onChange={(e) => onChange(e, cDate)}
+                required
+              /> */}
+
               <MuiPickersUtilsProvider
                 utils={DateFnsUtils}
                 className="date-picker"
@@ -223,14 +281,12 @@ function Booking(props) {
               </MuiPickersUtilsProvider>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridButton">
-              <button
+              <input
                 className="form-button"
                 variant="success"
                 type="submit"
-                onSubmit={(e) => submitHandler(e)}
-              >
-                Book an Estimate
-              </button>
+                label="Book an Estimate"
+              ></input>
             </Form.Group>
           </Row>
         </Container>
