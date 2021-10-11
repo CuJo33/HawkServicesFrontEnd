@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Dashboard from "./Dashboard";
+// import Dashboard from "./Dashboard";
 import { ApiClient } from "./apiClient";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Navbar from "./components/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Form from "react-bootstrap/Form";
+// import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 // import Cujo_head from "./cujo_head.jpg";
 import Col from "react-bootstrap/Col";
@@ -16,9 +16,9 @@ import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import Test from "./test/Test";
-import Booking from "./pages/Booking";
+import Booking from "./pages/booking";
 
-import { ProtectedRoute } from "./protectedRoute/ProtectedRoute";
+// import { ProtectedRoute } from "./protectedRoute/ProtectedRoute";
 import Footer from "./components/Footer";
 import About from "./pages/About";
 import Quotes from "./pages/Quotes";

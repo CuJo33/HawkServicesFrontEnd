@@ -14,6 +14,31 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
+const roundTimeOnload = (minutesToRound) => {
+  const current = new Date();
+  // const now = `${selectedDate.getHours()}:${selectedDate.getMinutes()}`;
+  // let [hours, minutes] = time.split(":");
+  const hours = parseInt(current.getHours());
+  const minutes = parseInt(current.getMinutes());
+
+  // Convert hours and minutes to time in minutes
+  const time = hours * 60 + minutes;
+
+  let rounded = Math.round(time / minutesToRound) * minutesToRound;
+  let rHr = "" + Math.floor(rounded / 60);
+  let rMin = "" + (rounded % 60);
+  let test = [rHr.padStart(2, "0"), rMin.padStart(2, "0")];
+  console.log(time);
+  const updated2 = new Date(
+    current.getFullYear(),
+    current.getMonth(),
+    current.getDate(),
+    test[0],
+    test[1]
+  );
+  return updated2;
+};
+
 function Booking(props) {
   const [disabled, cDisabled] = useState(false);
   const [bookings, cBookings] = useState([]);
@@ -26,23 +51,12 @@ function Booking(props) {
   const [postCode, cPostCode] = useState(undefined);
   const [telephoneNumber, cTelephoneNumber] = useState(undefined);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(roundTimeOnload(15));
 
-  // const refreshBookings = (id) => {
-  //   props.client.getBookings().then((response) => cBookings(response.data));
-  // };
-
-  // const returnBookings = () => {
-  //   return bookings.map((current) => {
-  //     return (
-  //       <option value={current.serviceName}>{current.fullServiceName}</option>
-  //     );
-  //   });
-  // };\
   let roundTime = (time, minutesToRound) => {
     let [hours, minutes] = time.split(":");
-    hours = parseInt(hours);
-    minutes = parseInt(minutes);
+    hours = parseInt(current.getHours());
+    minutes = parseInt(current.getMinutes());
 
     // Convert hours and minutes to time in minutes
     time = hours * 60 + minutes;
@@ -51,69 +65,46 @@ function Booking(props) {
     let rHr = "" + Math.floor(rounded / 60);
     let rMin = "" + (rounded % 60);
     let test = [rHr.padStart(2, "0"), rMin.padStart(2, "0")];
-    return test;
-  };
-
-  useEffect(() => {
-    const current = new Date();
-    // refreshBookings();
-    const now = `${selectedDate.getHours()}:${selectedDate.getMinutes()}`;
-    const rounded = roundTime(now, 15);
-    console.log("now", rounded);
-    console.log(current, "current");
-    const updated = [
-      current.getFullYear(),
-      current.getMonth(),
-      current.getDate(),
-      rounded,
-    ];
     const updated2 = new Date(
       current.getFullYear(),
       current.getMonth(),
       current.getDate(),
-      rounded[0],
-      rounded[1]
+      test[0],
+      test[1]
     );
-    console.log(updated2, rounded);
-    // console.log("parsed", Date.parse(rounded));
-    setSelectedTime(updated2);
-  });
+    return updated2;
+  };
 
+  // useEffect(() => {
+  //   const current = new Date();
+  //   const now = `${selectedDate.getHours()}:${selectedDate.getMinutes()}`;
+  //   const rounded = roundTime(now, 15);
+  //   const updated2 = new Date(
+  //     current.getFullYear(),
+  //     current.getMonth(),
+  //     current.getDate(),
+  //     rounded[0],
+  //     rounded[1]
+  //   );
+  //   setSelectedTime(updated2);
+  // }, []);
 
   const onChange = (e, changer) => {
     e.preventDefault();
     changer(e.target.value);
+  };
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
   const handleTimeChange = (time) => {
     setSelectedTime(time);
-
   };
 
   const history = useHistory();
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-  const handleTimeChange = (time) => {
-    setSelectedTime(time);
-  };
-
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("i am here");
-    console.log(
-      props.token,
-      date,
-      firstName,
-      surname,
-      addressLine1,
-      addressLine2,
-      telephoneNumber,
-      postCode
-    );
     cDisabled(true);
     props.client
       .createBooking(
@@ -143,12 +134,6 @@ function Booking(props) {
 
   return (
     <>
-      {/* <label id="roomLabel" for="rooms">
-        Choose a Room:
-      </label>
-      <select name="rooms" id="roomsSelect">
-        {returnBookings()}
-      </select> */}
       <Form
         onSubmit={(e) => submitHandler(e)}
         className="mx-auto"
@@ -253,7 +238,7 @@ function Booking(props) {
                     margin="normal"
                     id="date-picker"
                     disablePast
-                    Color="teal"
+                    color="primary"
                     value={selectedDate}
                     onChange={handleDateChange}
                     KeyboardButtonProps={{ "aria-label": "change date" }}
@@ -296,95 +281,3 @@ function Booking(props) {
 }
 
 export default Booking;
-
-{
-  /* <DatePicker
-type="date"
-requestDate={startDate}
-onChange={(date) => setStartDate(date)}
-showTimeSelect
-dateFormat="Pp"
-></DatePicker> */
-}
-
-{
-  /* <Form.Group as={Col} controlId="formGridCity">
-              <Form.Label> Date for estimate</Form.Label>
-              <DatePicker
-                requestDate={startDate}
-                onChange={(date) => setStartDate(date)}
-                showTimeSelect
-                dateFormat="Pp"
-              />
-            </Form.Group> */
-}
-
-{
-  /* <Form id="contact-form" method="POST">
-<label className="label" htmlFor="firstName">
-  First Name
-</label>
-<input
-  name="firstName"
-  // value={bookings.firstname}
-  placeholder="Enter first name..."
-  type="text"
-  required
-/>
-<label className="label" htmlFor="surname">
-  Surname
-</label>
-<input
-  name="surname"
-  placeholder="Enter surname..."
-  type="text"
-  required
-/>
-<label className="label" htmlFor="telephoneNumber">
-  Telephone Number
-</label>
-<input
-  name="telephoneNumber"
-  placeholder="Enter telephone number..."
-  type="text"
-  required
-/>
-<label className="label" htmlFor="addressLine1">
-  Address Line 1
-</label>
-<input
-  name="addressLine1"
-  placeholder="Enter your address..."
-  type="text"
-  required
-/>
-<label className="label" htmlFor="addressLine2">
-  Address Line 2
-</label>
-<textarea
-  placeholder="Enter your address..."
-  name="addressLine2"
-  type="text"
-></textarea>
-<label className="label" htmlFor="postCode">
-  PostCode
-</label>
-<textarea
-  placeholder="Enter your Postcode..."
-  name="postCode"
-  type="text"
-></textarea>
-<label className="label" htmlFor="requestDate">
-  Date for estimate
-</label>
-<DatePicker
-  requestDate={startDate}
-  onChange={(date) => setStartDate(date)}
-  showTimeSelect
-  dateFormat="Pp"
-/>
-<button type="submit" onSubmit={(e) => submitHandler(e)}>
-  Book an Estimate
-</button>
-</Form> */
-}

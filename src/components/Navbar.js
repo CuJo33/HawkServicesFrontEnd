@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Logo from "../assets/hawk.png";
 import { Link } from "react-router-dom";
-import ReorderIcon from "@mui/icons-material/Reorder";
+// import ReorderIcon from "@mui/icons-material/Reorder";
 import "../styles/Navbar.css";
 import { useHistory } from "react-router-dom";
 
 function Navbar(props) {
-  const [toggleMenu, setToggleMenu] = useState(false);
+  // const [toggleMenu, setToggleMenu] = useState(false);
+  const toggleMenu = false;
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  const toggleNav = () => {
-    setToggleMenu(!toggleMenu);
-  };
+  // const toggleNav = () => {
+  //   setToggleMenu(!toggleMenu);
+  // };
 
   useEffect(() => {
     const changeWidth = () => {

@@ -22,7 +22,7 @@ function Dashboard(props) {
   };
 
   useEffect(() => {
-    refreshList();
+    props.client.getEvents().then((response) => cEvents(response.data));
   }, []);
 
   const buildrows = () => {

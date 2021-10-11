@@ -9,27 +9,36 @@ function Quotes(props) {
   const [services, cServices] = useState([]);
   const [formService, cFormService] = useState();
   const [formRoom, cFormRoom] = useState();
-  const [clicked, cClicked] = useState(false);
+  // const [clicked, cClicked] = useState(false);
 
-  const refreshServices = (id) => {
+  // const refreshServices = (id) => {
+  //   props.client.getServices("-1").then((response) => {
+  //     cFormService(response.data[0].fullServiceName);
+  //     cServices(response.data);
+  //   });
+  // };
+
+  // const refreshRooms = () => {
+  //   props.client.getRooms("-1").then((response) => {
+  //     cFormRoom(response.data[0].fullRoomName);
+
+  //     cRooms(response.data);
+  //   });
+  // };
+
+  useEffect(() => {
     props.client.getServices("-1").then((response) => {
       cFormService(response.data[0].fullServiceName);
       cServices(response.data);
     });
-  };
-
-  const refreshRooms = () => {
     props.client.getRooms("-1").then((response) => {
       cFormRoom(response.data[0].fullRoomName);
 
       cRooms(response.data);
     });
-  };
-
-  useEffect(() => {
-    refreshRooms();
-    refreshServices();
-  }, []);
+    // refreshRooms();
+    // refreshServices();
+  }, [props.client]);
 
   const returnRooms = () => {
     return rooms.map((current, index) => {
@@ -60,7 +69,7 @@ function Quotes(props) {
     props.client.deleteJob(jobId);
     cJobs((p) => {
       const newArray = p.filter((i) => {
-        return i.jobId != jobId;
+        return i.jobId !== jobId;
       });
       return newArray;
     });
@@ -98,14 +107,14 @@ function Quotes(props) {
     e.preventDefault();
     const target = e.target.value;
     if (arg === "rooms") {
-      rooms.map((c) => {
+      rooms.forEach((c) => {
         if (c.roomId === target) {
           cFormRoom(c.fullRoomName);
         }
       });
     }
     if (arg === "services") {
-      services.map((c) => {
+      services.forEach((c) => {
         if (c.serviceId === target) {
           cFormService(c.fullServiceName);
         }
@@ -116,7 +125,7 @@ function Quotes(props) {
   const submitHandler = (e) => {
     e.preventDefault();
     const jobList = [];
-    jobs.map((j) => {
+    jobs.forEach((j) => {
       jobList.push(j.jobId);
     });
     console.log(props.clientId, props.employeeId, jobList);
@@ -184,7 +193,11 @@ function Quotes(props) {
         <input type="submit" label="Create Job"></input>
       </form>
 
-      <button type="submit" onClick={(e) => submitHandler(e)}>
+      <button
+        type="submit"
+        disabled={disabled}
+        onClick={(e) => submitHandler(e)}
+      >
         Submit Quote
       </button>
     </div>
