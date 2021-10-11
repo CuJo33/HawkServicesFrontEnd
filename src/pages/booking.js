@@ -59,8 +59,6 @@ function Booking(props) {
     // refreshBookings();
     const now = `${selectedDate.getHours()}:${selectedDate.getMinutes()}`;
     const rounded = roundTime(now, 15);
-    console.log("now", rounded);
-    console.log(current, "current");
     const updated = [
       current.getFullYear(),
       current.getMonth(),
@@ -74,51 +72,31 @@ function Booking(props) {
       rounded[0],
       rounded[1]
     );
-    console.log(updated2, rounded);
-    // console.log("parsed", Date.parse(rounded));
     setSelectedTime(updated2);
-  });
-
+  }, []);
 
   const onChange = (e, changer) => {
     e.preventDefault();
     changer(e.target.value);
-
+  };
   const handleDateChange = (date) => {
+    console.log(date);
     setSelectedDate(date);
   };
   const handleTimeChange = (time) => {
     setSelectedTime(time);
-
   };
 
   const history = useHistory();
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-  const handleTimeChange = (time) => {
-    setSelectedTime(time);
-  };
-
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("i am here");
-    console.log(
-      props.token,
-      date,
-      firstName,
-      surname,
-      addressLine1,
-      addressLine2,
-      telephoneNumber,
-      postCode
-    );
     cDisabled(true);
     props.client
       .createBooking(
         props.token,
-        date,
+        selectedDate,
+        selectedTime,
         firstName,
         surname,
         addressLine1,
@@ -143,12 +121,6 @@ function Booking(props) {
 
   return (
     <>
-      {/* <label id="roomLabel" for="rooms">
-        Choose a Room:
-      </label>
-      <select name="rooms" id="roomsSelect">
-        {returnBookings()}
-      </select> */}
       <Form
         onSubmit={(e) => submitHandler(e)}
         className="mx-auto"
@@ -232,15 +204,6 @@ function Booking(props) {
             </Form.Group>
             <Form.Group as={Col} controlId="formGridDate">
               <Form.Label> Date for estimate</Form.Label>
-              {/* <input
-                className="form-control"
-                name="requestDate"
-                type="date"
-                value={date}
-                onChange={(e) => onChange(e, cDate)}
-                required
-              /> */}
-
               <MuiPickersUtilsProvider
                 utils={DateFnsUtils}
                 className="date-picker"
@@ -296,95 +259,3 @@ function Booking(props) {
 }
 
 export default Booking;
-
-{
-  /* <DatePicker
-type="date"
-requestDate={startDate}
-onChange={(date) => setStartDate(date)}
-showTimeSelect
-dateFormat="Pp"
-></DatePicker> */
-}
-
-{
-  /* <Form.Group as={Col} controlId="formGridCity">
-              <Form.Label> Date for estimate</Form.Label>
-              <DatePicker
-                requestDate={startDate}
-                onChange={(date) => setStartDate(date)}
-                showTimeSelect
-                dateFormat="Pp"
-              />
-            </Form.Group> */
-}
-
-{
-  /* <Form id="contact-form" method="POST">
-<label className="label" htmlFor="firstName">
-  First Name
-</label>
-<input
-  name="firstName"
-  // value={bookings.firstname}
-  placeholder="Enter first name..."
-  type="text"
-  required
-/>
-<label className="label" htmlFor="surname">
-  Surname
-</label>
-<input
-  name="surname"
-  placeholder="Enter surname..."
-  type="text"
-  required
-/>
-<label className="label" htmlFor="telephoneNumber">
-  Telephone Number
-</label>
-<input
-  name="telephoneNumber"
-  placeholder="Enter telephone number..."
-  type="text"
-  required
-/>
-<label className="label" htmlFor="addressLine1">
-  Address Line 1
-</label>
-<input
-  name="addressLine1"
-  placeholder="Enter your address..."
-  type="text"
-  required
-/>
-<label className="label" htmlFor="addressLine2">
-  Address Line 2
-</label>
-<textarea
-  placeholder="Enter your address..."
-  name="addressLine2"
-  type="text"
-></textarea>
-<label className="label" htmlFor="postCode">
-  PostCode
-</label>
-<textarea
-  placeholder="Enter your Postcode..."
-  name="postCode"
-  type="text"
-></textarea>
-<label className="label" htmlFor="requestDate">
-  Date for estimate
-</label>
-<DatePicker
-  requestDate={startDate}
-  onChange={(date) => setStartDate(date)}
-  showTimeSelect
-  dateFormat="Pp"
-/>
-<button type="submit" onSubmit={(e) => submitHandler(e)}>
-  Book an Estimate
-</button>
-</Form> */
-}

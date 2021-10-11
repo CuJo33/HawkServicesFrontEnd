@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Dashboard from "./Dashboard";
 import { ApiClient } from "./apiClient";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -22,6 +21,7 @@ import { ProtectedRoute } from "./protectedRoute/ProtectedRoute";
 import Footer from "./components/Footer";
 import About from "./pages/About";
 import Quotes from "./pages/Quotes";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const [token, changeToken] = useState(
@@ -105,6 +105,9 @@ function App() {
           </Route>
           <Route exact path="/booking">
             <Booking client={client} token={token} clientId={clientId} />
+          </Route>
+          <Route exact path="/dashboard">
+            <Dashboard client={client} token={token} clientId={clientId} />
           </Route>
           <Route path="/test">
             <Test />
