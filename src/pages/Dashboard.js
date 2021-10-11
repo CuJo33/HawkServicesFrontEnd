@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Dashboard.css";
 import Table from "react-bootstrap/Table";
+import { useHistory } from "react-router-dom";
 
 function Dashboard(props) {
   const [disabled, cDisabled] = useState(false);
   const [bookings, cBookings] = useState([]);
   const [quotes, cQuotes] = useState([]);
+  const [jobs, cJobs] = useState([]);
+  const [clicked, cClicked] = useState(false);
 
-  const refreshBookings = (id) => {
-    props.client.getBookings(props.clientId).then((response) => {
-      console.log(response);
-      cBookings(response.data);
-    });
+  const history = useHistory();
+
+  const refreshBookings = async () => {
+    // get all the bookings, and store it in data: [{},{}]
+    let { data } = await props.client.getBookings(props.clientId);
+    // mapping over async stuff gets tricky
+    // await an array of promises, and store their resolution in data
+    data = await Promise.all(
+      // map over booking
+      data.map(async (v, i) => {
+        // get employee name (async)
+        const res = await getEmployee(v.employeeId);
+        // make a new object, duplicate of booking with new feild, employeeName
+        return { ...v, employeeName: res.data.username };
+      })
+    );
+    if (data.length === 0) {
+      cBookings(false);
+    } else {
+      cBookings(data);
+    }
   };
 
   const refreshQuotes = (id) => {
@@ -27,6 +46,7 @@ function Dashboard(props) {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    history.push("/booking");
     // props.client
     //   .createBooking(props.clientId, props.employeeId, jobList)
     //   .then((response) => {
@@ -43,50 +63,191 @@ function Dashboard(props) {
     //   });
   };
 
-  const getEmployee = async (id) => {
-    // const ret = await props.client.getEmployee(id).then((response) => {
-    //   return response.data.username;
-    // });
-    // console.log(ret);
-    return "test";
+  const getEmployee = (id) => {
+    return props.client.getEmployee(id);
+  };
+
+  const getRooms = (id) => {
+    return props.client.getRooms(id);
+  };
+
+  const getServices = (id) => {
+    return props.client.getServices(id);
+  };
+
+  const getJobStatusId = (id) => {
+    return props.client.getJobStatusId(id);
+  };
+
+  const acceptQuoteHandler = (e, quoteId) => {
+    e.preventDefault();
+    props.client
+      .acceptQuote(quoteId)
+      .then((response) => {
+        if (response.data.status === 404) {
+          throw new Error(response.data.message);
+        } else if (response.data.status === 200) {
+          alert("Quote accepted");
+        }
+        cDisabled(false);
+      })
+      .catch((e) => {
+        alert(e);
+        cDisabled(false);
+      });
+    refreshQuotes();
+  };
+
+  const clickHandler = async (e, quoteId) => {
+    if (!clicked) {
+      cClicked(!clicked);
+      let { data } = await props.client.getJobs(quoteId);
+      data = await Promise.all(
+        // map over jobs
+        data.map(async (v, i) => {
+          // get room name (async)
+          const res = await getRooms(v.roomId);
+          // make a new object, duplicate of jobs with new feild, roomName
+          return { ...v, roomName: res.data.fullRoomName };
+        })
+      );
+      data = await Promise.all(
+        // map over jobs
+        data.map(async (v, i) => {
+          // get service name (async)
+          const res = await getServices(v.serviceId);
+          // make a new object, duplicate of jobs with new feild, serviceName
+          return { ...v, serviceName: res.data.fullServiceName };
+        })
+      );
+      data = await Promise.all(
+        // map over jobs
+        data.map(async (v, i) => {
+          // get jobservicename (async)
+          const res = await getJobStatusId(v.jobStatusId);
+          // make a new object, duplicate of jobs with new feild, serviceName
+          return { ...v, jobStatusName: res.data.fullJobStatusName };
+        })
+      );
+      data = await Promise.all(
+        // map over booking
+        data.map(async (v, i) => {
+          // get employee name (async)
+          const res = await getEmployee(v.employeeId);
+          // make a new object, duplicate of booking with new feild, employeeName
+          return { ...v, employeeName: res.data.username };
+        })
+      );
+      cDisabled(false);
+      await cJobs(data);
+    } else {
+      cClicked(!clicked);
+    }
   };
 
   return (
     <div>
       <h1 style={{ marginTop: "75px" }}></h1>
-      <h2>Bookings</h2>
-      <button onClick={(e) => submitHandler(e, props.clientId)}>
-        Create a booking
-      </button>
+      {bookings ? (
+        <div>
+          <h2>Bookings</h2>
+
+          <Table>
+            <thead>
+              <tr>
+                <th>Date Booked</th>
+                <th>Estimate Booked Date</th>
+                <th>Booked Time</th>
+                <th>Assigned Employee</th>
+                <th>Estimate Completed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bookings.map((current, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{current.bookedDate}</td>
+                    <td>{current.requestDate}</td>
+                    <td>{current.requestTime}</td>
+                    <td>{current.employeeName}</td>
+                    <td>{String(current.completed)}</td>
+                    <td></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </div>
+      ) : (
+        <div>
+          <h3>You currently have No bookings</h3>
+          <button onClick={(e) => submitHandler(e, props.clientId)}>
+            Create a booking
+          </button>
+        </div>
+      )}
+      <h2>Quotes</h2>
       <Table>
         <thead>
           <tr>
-            <th>Date Booked</th>
-            <th>Estimate Booked Date</th>
-            <th>Booked Time</th>
-            <th>Assigned Employee</th>
-            <th>Estimate Completed</th>
+            <th>Quote Id</th>
+            <th>Job List</th>
+            <th>Request Date</th>
+            <th>Estimated by</th>
+            <th>Client Accepted</th>
           </tr>
         </thead>
         <tbody>
-          {bookings.map((current, index) => {
+          {quotes.map((current, index) => {
             return (
               <tr key={index}>
-                <td>{current.bookedDate}</td>
+                <td>{current.quoteId}</td>
+                <td>
+                  <button onClick={(e) => clickHandler(e, current.quoteId)}>
+                    See Job List
+                  </button>
+                </td>
                 <td>{current.requestDate}</td>
-                <td>{current.requestTime}</td>
-                <td>{getEmployee(current.employeeId)}</td>
-                <td>{current.completed}</td>
-                <td></td>
+                <td>{current.employeeId}</td>
+                <td>{String(current.clientAccepted)}</td>
+                <button onClick={(e) => acceptQuoteHandler(e, current.quoteId)}>
+                  Accept Quote
+                </button>
               </tr>
             );
           })}
         </tbody>
       </Table>
-      <h2>Quotes</h2>
-      {quotes}
-      <h2>ClientId</h2>
-      {props.clientId}
+      {clicked ? (
+        <Table>
+          <thead>
+            <tr>
+              <th>Job Number</th>
+              <th>Room Name</th>
+              <th>Service Name</th>
+              <th>Job Status</th>
+              <th>Assigned To</th>
+              <th>Client Sign off</th>
+            </tr>
+          </thead>
+          <tbody>
+            {jobs.map((current, index) => {
+              return (
+                <tr key={index}>
+                  <td>{current.jobId}</td>
+                  <td>{current.roomName}</td>
+                  <td>{current.serviceName}</td>
+                  <td>{current.jobStatusName}</td>
+                  <td>{current.employeeName}</td>
+                  <td>{String(current.clientSignOff)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }

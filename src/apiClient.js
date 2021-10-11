@@ -1,6 +1,6 @@
 import axios from "axios";
-const url = "https://hawkservices.herokuapp.com/";
-// const url = "http://localhost:3001/";
+// const url = "https://hawkservices.herokuapp.com/";
+const url = "http://localhost:3001/";
 
 export class ApiClient {
   constructor(tokenProvider, logoutHandler) {
@@ -45,6 +45,10 @@ export class ApiClient {
     return this.apiCall("get", `${url}services/${id}`);
   }
 
+  getJobStatusId(id) {
+    return this.apiCall("get", `${url}Jobstatus/${id}`);
+  }
+
   getQuotes(id) {
     return this.apiCall("get", `${url}quotes/${id}`);
   }
@@ -55,6 +59,10 @@ export class ApiClient {
 
   getEmployee(id) {
     return this.apiCall("get", `${url}employee/${id}`);
+  }
+
+  getJobs(id) {
+    return this.apiCall("get", `${url}jobs/${id}`);
   }
 
   createBooking(
@@ -95,6 +103,11 @@ export class ApiClient {
       employeeId,
       jobList,
     });
+  }
+
+  acceptQuote(quoteId) {
+    console.log("hit api");
+    return this.apiCall("put", `${url}quote/${quoteId}`);
   }
 
   // space

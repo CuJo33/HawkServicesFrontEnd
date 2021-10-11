@@ -110,8 +110,7 @@ function Booking(props) {
         }
         alert("Booking created");
         cDisabled(false);
-        // need to have a page that the cleint Goes to after making a booking
-        // history.push("/quotes");
+        history.push("/dashboard");
       })
       .catch((e) => {
         alert(e);
