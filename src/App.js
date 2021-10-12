@@ -16,12 +16,14 @@ import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import Test from "./test/Test";
 import Booking from "./pages/Booking";
+import LoginEmployee from "./pages/LoginEmployee";
 
 import { ProtectedRoute } from "./protectedRoute/ProtectedRoute";
 import Footer from "./components/Footer";
 import About from "./pages/About";
 import Quotes from "./pages/Quotes";
 import Dashboard from "./pages/Dashboard";
+import DashboardEmployee from "./pages/DashboardEmployee";
 
 function App() {
   const [token, changeToken] = useState(
@@ -33,36 +35,28 @@ function App() {
   const [employeeId, cEmployeeId] = useState(
     window.localStorage.getItem("employeeId")
   );
-  // const [employeeId, cEmployeeId] = useState(
-  //   window.localStorage.getItem("employeeId")
-  // );
+
   const client = new ApiClient(
     () => token,
     () => logout()
   );
 
-  // need to remove this later - it's here because we don't have a employee login page
   useEffect(() => {
-    cEmployeeId("614dab91d76d0c1576f8b9e5");
+    // cEmployeeId("614dab91d76d0c1576f8b9e5");
   }, []);
-
-  // need to make an employeeId version of the login
-  // need to make an employeeId version of the login
-  // need to make an employeeId version of the login
-  // need to make an employeeId version of the login
-  // need to make an employeeId version of the login
-  // need to make an employeeId version of the login
-  // need to make an employeeId version of the login
-  // need to make an employeeId version of the login
-  // need to make an employeeId version of the login
-  // need to make an employeeId version of the login
-  // need to make an employeeId version of the login
 
   const login = (t, c) => {
     window.localStorage.setItem("authToken", t);
     window.localStorage.setItem("clientId", c);
     changeToken(t);
     cClientId(c);
+  };
+
+  const loginEmployee = (t, c) => {
+    window.localStorage.setItem("authToken", t);
+    window.localStorage.setItem("employeeId", c);
+    changeToken(t);
+    cEmployeeId(c);
   };
 
   const logout = () => {
@@ -77,7 +71,12 @@ function App() {
   return (
     <>
       <Router>
-        <Navbar token={token} logout={logout} />
+        <Navbar
+          token={token}
+          logout={logout}
+          clientId={clientId}
+          employeeId={employeeId}
+        />
         <Switch>
           <Route path="/" exact>
             <Home />
@@ -109,11 +108,25 @@ function App() {
           <Route exact path="/dashboard">
             <Dashboard client={client} token={token} clientId={clientId} />
           </Route>
+          <Route exact path="/dashboardEmployee">
+            <DashboardEmployee
+              client={client}
+              token={token}
+              clientId={clientId}
+              employeeId={employeeId}
+            />
+          </Route>
           <Route path="/test">
             <Test />
           </Route>
           <Route path="/login">
             <Login loggedIn={(t, c) => login(t, c)} client={client}></Login>
+          </Route>
+          <Route path="/loginEmployee">
+            <LoginEmployee
+              loggedInEmployee={(t, c) => loginEmployee(t, c)}
+              client={client}
+            ></LoginEmployee>
           </Route>
           <Route path="/signup">
             <Signup client={client} />

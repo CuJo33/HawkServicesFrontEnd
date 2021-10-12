@@ -43,9 +43,14 @@ function Navbar(props) {
             <Link to="/services"> Services </Link>
             <Link to="/about"> About </Link>
             <Link to="/contact"> Contact </Link>
-            <Link to="/quotes"> Quotes </Link>
-            <Link to="/booking"> Booking </Link>
-            <Link to="/dashboard"> Dashboard </Link>
+            {props.clientId ? "" : <Link to="/quotes"> Quotes </Link>}
+            {/* {props.clientId ? <Link to="/booking"> Booking </Link> : ""} */}
+            {props.employeeId ? (
+              <Link to="/dashboardEmployee"> Employee-Dashboard </Link>
+            ) : (
+              ""
+            )}
+            {props.clientId ? <Link to="/dashboard"> Dashboard </Link> : ""}
           </ul>
         )}
 

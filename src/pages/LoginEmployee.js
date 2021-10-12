@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../styles/Login.css";
+import "../styles/LoginEmployee.css";
 import { useHistory } from "react-router-dom";
 
-function Login(props) {
+function LoginEmployee(props) {
   const [disabled, cDisabled] = useState(false);
   const [user, cUser] = useState("");
   const [password, cPassword] = useState("");
@@ -19,14 +19,14 @@ function Login(props) {
     e.preventDefault();
     cDisabled(true);
     props.client
-      .login(e.target.username.value, e.target.password.value)
+      .loginEmployee(e.target.username.value, e.target.password.value)
       .then((response) => {
         if (response.data.status === 401 || response.data.status === 403) {
           throw new Error(response.data.message);
         }
         cDisabled(false);
-        props.loggedIn(response.data.token, response.data.clientId);
-        history.push("/dashboard");
+        props.loggedInEmployee(response.data.token, response.data.employeeId);
+        history.push("/dashboardEmployee");
       })
       .catch((e) => {
         alert(e);
@@ -38,7 +38,7 @@ function Login(props) {
     <>
       <br />
       <form className="login-form" onSubmit={(e) => submitHandler(e)}>
-        <h4>Login</h4> <br />
+        <h4>Employee Login</h4> <br />
         <input
           onChange={(e) => onChange(e, cUser)}
           type="text"
@@ -64,17 +64,13 @@ function Login(props) {
           label="Submit"
         ></input>
         <br />
-        <p>
-          If you dont have an account,{" "}
-          <Link to="/signup">Please click here to register </Link>
-        </p>
-        <p>
-          If you are an employee, <Link to="/loginEmployee">Log in here. </Link>
-        </p>
         <br />
+        <p>
+          <Link to="/login">Return </Link>
+        </p>
       </form>
     </>
   );
 }
 
-export default Login;
+export default LoginEmployee;

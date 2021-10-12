@@ -53,8 +53,16 @@ export class ApiClient {
     return this.apiCall("get", `${url}quotes/${id}`);
   }
 
+  getQuotesEmployee(id) {
+    return this.apiCall("get", `${url}quotesEmployee/${id}`);
+  }
+
   getBookings(id) {
     return this.apiCall("get", `${url}booking/${id}`);
+  }
+
+  getBookingsEmployee(id) {
+    return this.apiCall("get", `${url}bookingEmployee/${id}`);
   }
 
   getEmployee(id) {
@@ -155,6 +163,17 @@ export class ApiClient {
     return await axios({
       method: "POST",
       url: `${url}login`,
+      data: {
+        username,
+        password,
+      },
+    });
+  }
+
+  async loginEmployee(username, password) {
+    return await axios({
+      method: "POST",
+      url: `${url}login/employee`,
       data: {
         username,
         password,

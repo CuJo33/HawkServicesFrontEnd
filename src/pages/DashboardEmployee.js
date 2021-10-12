@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Dashboard.css";
+import "../styles/DashboardEmployee.css";
 import Table from "react-bootstrap/Table";
 import { useHistory } from "react-router-dom";
 
-function Dashboard(props) {
+function DashboardEmployee(props) {
   const [disabled, cDisabled] = useState(false);
   const [bookings, cBookings] = useState([]);
   const [quotes, cQuotes] = useState([]);
@@ -14,7 +14,7 @@ function Dashboard(props) {
 
   const refreshBookings = async () => {
     // get all the bookings, and store it in data: [{},{}]
-    let { data } = await props.client.getBookings(props.clientId);
+    let { data } = await props.client.getBookingsEmployee(props.employeeId);
     // mapping over async stuff gets tricky
     // await an array of promises, and store their resolution in data
     data = await Promise.all(
@@ -34,8 +34,7 @@ function Dashboard(props) {
   };
 
   const refreshQuotes = async (id) => {
-    let { data } = await props.client.getQuotes(props.clientId);
-
+    let { data } = await props.client.getQuotesEmployee(props.employeeId);
     if (data.length === 0) {
       cQuotes(false);
     } else {
@@ -134,7 +133,6 @@ function Dashboard(props) {
   return (
     <div>
       <h1 style={{ marginTop: "75px" }}></h1>
-      <h2>Welcome to your Dashboard</h2>
       {bookings ? (
         <div>
           <h2>Bookings</h2>
@@ -163,18 +161,10 @@ function Dashboard(props) {
               })}
             </tbody>
           </Table>
-          <div>
-            <button onClick={(e) => submitHandler(e, props.clientId)}>
-              Create another booking
-            </button>
-          </div>
         </div>
       ) : (
         <div>
-          <h3>You currently have No bookings</h3>
-          <button onClick={(e) => submitHandler(e, props.clientId)}>
-            Create a booking
-          </button>
+          <h3>You currently have No bookings scheduled</h3>
         </div>
       )}
       {quotes ? (
@@ -246,11 +236,11 @@ function Dashboard(props) {
         </div>
       ) : (
         <div>
-          <h4>You currently have No quotes</h4>
+          <h4>You currently have No open quotes</h4>
         </div>
       )}
     </div>
   );
 }
 
-export default Dashboard;
+export default DashboardEmployee;
