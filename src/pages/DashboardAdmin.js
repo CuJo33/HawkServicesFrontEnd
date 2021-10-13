@@ -16,6 +16,7 @@ function DashboardAdmin(props) {
   const refreshBookings = async () => {
     // get all the bookings, and store it in data: [{},{}]
     let { data } = await props.client.getBookings("-1");
+    console.log("in refresh booking, whats my data ", data);
     // mapping over async stuff gets tricky
     // await an array of promises, and store their resolution in data
     data = await Promise.all(
@@ -39,12 +40,34 @@ function DashboardAdmin(props) {
     if (data.length === 0) {
       cQuotes(false);
     } else {
+      data = await Promise.all(
+        // map over jobs
+        data.map(async (v, i) => {
+          // get room name (async)
+          const res4 = await getEmployee(v.employeeId);
+          // make a new object, duplicate of jobs with new feild, roomName
+          return {
+            ...v,
+            employeeName: res4.data.username,
+          };
+        })
+      );
       cQuotes(data);
     }
   };
 
+  // const refreshJobs = async (id) => {
+  //   let { data } = await props.client.getJobs("-1");
+  //   if (data.length === 0) {
+  //     cJobs(false);
+  //   } else {
+  //     cJobs(data);
+  //   }
+  // };
+
   const refreshEmployees = async (id) => {
     let { data } = await props.client.getEmployee("-1");
+    console.log("in refresh employee, whats my data ", data);
     if (data.length === 0) {
       cEmployees(false);
     } else {
@@ -104,6 +127,7 @@ function DashboardAdmin(props) {
   };
 
   const assignEmployee = async (e, bookingId) => {
+    console.log("in assign employee BOOKING ", bookingId);
     e.preventDefault();
     props.client
       .updateBookings(bookingId, e.target.value)
@@ -122,10 +146,30 @@ function DashboardAdmin(props) {
     refreshBookings();
   };
 
+  const assignEmployeeJob = async (e, jobId) => {
+    console.log("in assign employee JOB ", jobId);
+    e.preventDefault();
+    props.client
+      .updateJobs(jobId, e.target.value)
+      .then((response) => {
+        if (response.data.status === 404) {
+          throw new Error(response.data.message);
+        } else if (response.data.status === 200) {
+          // alert("Quote created");
+        }
+        cDisabled(false);
+      })
+      .catch((e) => {
+        alert(e);
+        cDisabled(false);
+      });
+    refreshQuotes();
+  };
+
   const clickHandler = async (e, quoteId) => {
     if (!clicked) {
       cClicked(!clicked);
-      let { data } = await props.client.getJobs(quoteId);
+      let { data } = await props.client.getJobsByQuoteId(quoteId);
       data = await Promise.all(
         // map over jobs
         data.map(async (v, i) => {
@@ -241,7 +285,7 @@ function DashboardAdmin(props) {
                       </button>
                     </td>
                     <td>{current.requestDate}</td>
-                    <td>{current.employeeId}</td>
+                    <td>{current.employeeName}</td>
                     <td>{String(current.clientAccepted)}</td>
                   </tr>
                 );
@@ -268,7 +312,15 @@ function DashboardAdmin(props) {
                       <td>{current.roomName}</td>
                       <td>{current.serviceName}</td>
                       <td>{current.jobStatusName}</td>
-                      <td>{current.employeeName}</td>
+                      <td>
+                        {current.employeeName}{" "}
+                        <select
+                          id="jobs"
+                          onChange={(e) => assignEmployeeJob(e, current.jobId)}
+                        >
+                          {returnEmployees()}
+                        </select>
+                      </td>
                       <td>{String(current.clientSignOff)}</td>
                     </tr>
                   );

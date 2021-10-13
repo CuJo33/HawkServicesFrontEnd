@@ -40,6 +40,18 @@ function DashboardEstimator(props) {
     if (data.length === 0) {
       cQuotes(false);
     } else {
+      data = await Promise.all(
+        // map over jobs
+        data.map(async (v, i) => {
+          // get room name (async)
+          const res4 = await getEmployee(v.employeeId);
+          // make a new object, duplicate of jobs with new feild, roomName
+          return {
+            ...v,
+            employeeName: res4.data.username,
+          };
+        })
+      );
       cQuotes(data);
     }
   };
@@ -111,7 +123,7 @@ function DashboardEstimator(props) {
   const clickHandler = async (e, quoteId) => {
     if (!clicked) {
       cClicked(!clicked);
-      let { data } = await props.client.getJobs(quoteId);
+      let { data } = await props.client.getJobsByQuoteId(quoteId);
       data = await Promise.all(
         // map over jobs
         data.map(async (v, i) => {
@@ -209,13 +221,8 @@ function DashboardEstimator(props) {
                       </button>
                     </td>
                     <td>{current.requestDate}</td>
-                    <td>{current.employeeId}</td>
+                    <td>{current.employeeName}</td>
                     <td>{String(current.clientAccepted)}</td>
-                    <button
-                      onClick={(e) => acceptQuoteHandler(e, current.quoteId)}
-                    >
-                      Accept Quote
-                    </button>
                   </tr>
                 );
               })}

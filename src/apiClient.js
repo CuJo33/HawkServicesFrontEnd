@@ -54,6 +54,7 @@ export class ApiClient {
   }
 
   getQuotes(id) {
+    console.log("in api", id);
     return this.apiCall("get", `${url}quotes/${id}`);
   }
 
@@ -78,8 +79,17 @@ export class ApiClient {
     return this.apiCall("get", `${url}employee/${id}`);
   }
 
+  getJobsByQuoteId(id) {
+    return this.apiCall("get", `${url}jobsByQuoteId/${id}`);
+  }
+
   getJobs(id) {
     return this.apiCall("get", `${url}jobs/${id}`);
+  }
+
+  updateJobs(jobId, employeeId) {
+    console.log("in api, jobId ", jobId, " employeeId ", employeeId);
+    return this.apiCall("put", `${url}jobs/${jobId}/${employeeId}`);
   }
 
   createBooking(
