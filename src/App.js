@@ -32,8 +32,14 @@ function App() {
   const [clientId, cClientId] = useState(
     window.localStorage.getItem("clientId")
   );
+  const [passedClientId, cPassedClientId] = useState(
+    window.localStorage.getItem("passedClientId")
+  );
   const [employeeId, cEmployeeId] = useState(
     window.localStorage.getItem("employeeId")
+  );
+  const [employeeRole, cEmployeeRole] = useState(
+    window.localStorage.getItem("employeeRole")
   );
 
   const client = new ApiClient(
@@ -52,20 +58,24 @@ function App() {
     cClientId(c);
   };
 
-  const loginEmployee = (t, c) => {
+  const loginEmployee = (t, c, r) => {
     window.localStorage.setItem("authToken", t);
     window.localStorage.setItem("employeeId", c);
+    window.localStorage.setItem("employeeRole", r);
     changeToken(t);
     cEmployeeId(c);
+    cEmployeeRole(r);
   };
 
   const logout = () => {
     window.localStorage.removeItem("authToken");
     window.localStorage.removeItem("clientId");
     window.localStorage.removeItem("employeeId");
+    window.localStorage.removeItem("employeeRole");
     changeToken(undefined);
     cClientId(undefined);
     cEmployeeId(undefined);
+    cEmployeeRole(undefined);
   };
 
   return (
@@ -97,6 +107,10 @@ function App() {
                 token={token}
                 employeeId={employeeId}
                 clientId={clientId}
+                passedClientId={passedClientId}
+                clientChanger={(passedClientId) => {
+                  cPassedClientId(passedClientId);
+                }}
               />
             ) : (
               <Login loggedIn={(t, c) => login(t, c)} client={client}></Login>
@@ -113,7 +127,11 @@ function App() {
               client={client}
               token={token}
               clientId={clientId}
+              clientChanger={(passedClientId) => {
+                cPassedClientId(passedClientId);
+              }}
               employeeId={employeeId}
+              employeeRole={employeeRole}
             />
           </Route>
           <Route path="/test">
@@ -124,7 +142,7 @@ function App() {
           </Route>
           <Route path="/loginEmployee">
             <LoginEmployee
-              loggedInEmployee={(t, c) => loginEmployee(t, c)}
+              loggedInEmployee={(t, c, r) => loginEmployee(t, c, r)}
               client={client}
             ></LoginEmployee>
           </Route>

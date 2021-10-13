@@ -25,7 +25,11 @@ function LoginEmployee(props) {
           throw new Error(response.data.message);
         }
         cDisabled(false);
-        props.loggedInEmployee(response.data.token, response.data.employeeId);
+        props.loggedInEmployee(
+          response.data.token,
+          response.data.employeeId,
+          response.data.role
+        );
         history.push("/dashboardEmployee");
       })
       .catch((e) => {
@@ -66,7 +70,7 @@ function LoginEmployee(props) {
         <br />
         <br />
         <p>
-          <Link to="/login">Return </Link>
+          <Link to="/login">Return</Link>
         </p>
       </form>
     </>

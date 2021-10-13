@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Dashboard.css";
+import "../styles/DashboardEstimator.css";
 import Table from "react-bootstrap/Table";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { propTypes } from "react-bootstrap/esm/Image";
 
-function Dashboard(props) {
+function DashboardEstimator(props) {
   const [disabled, cDisabled] = useState(false);
   const [bookings, cBookings] = useState([]);
   const [quotes, cQuotes] = useState([]);
@@ -14,7 +16,7 @@ function Dashboard(props) {
 
   const refreshBookings = async () => {
     // get all the bookings, and store it in data: [{},{}]
-    let { data } = await props.client.getBookings(props.clientId);
+    let { data } = await props.client.getBookingsEmployee(props.employeeId);
     // mapping over async stuff gets tricky
     // await an array of promises, and store their resolution in data
     data = await Promise.all(
@@ -34,8 +36,7 @@ function Dashboard(props) {
   };
 
   const refreshQuotes = async (id) => {
-    let { data } = await props.client.getQuotes(props.clientId);
-
+    let { data } = await props.client.getQuotesEmployee(props.employeeId);
     if (data.length === 0) {
       cQuotes(false);
     } else {
@@ -83,15 +84,15 @@ function Dashboard(props) {
     return props.client.getJobStatusId(id);
   };
 
-  const acceptQuoteHandler = async (e, quoteId) => {
+  const acceptQuoteHandler = (e, quoteId) => {
     e.preventDefault();
-    await props.client
+    props.client
       .acceptQuote(quoteId)
       .then((response) => {
         if (response.data.status === 404) {
           throw new Error(response.data.message);
         } else if (response.data.status === 200) {
-          // alert("Quote accepted");
+          alert("Quote accepted");
         }
         cDisabled(false);
       })
@@ -100,6 +101,11 @@ function Dashboard(props) {
         cDisabled(false);
       });
     refreshQuotes();
+  };
+
+  const createQuote = (e, bookingId, ClientId) => {
+    props.clientChanger(ClientId);
+    history.push("/quotes");
   };
 
   const clickHandler = async (e, quoteId) => {
@@ -133,9 +139,7 @@ function Dashboard(props) {
 
   return (
     <div>
-      <h1 style={{ marginTop: "75px" }}></h1>
-      <h2>Welcome to your Dashboard</h2>
-      <h2>Client</h2>
+      <h2>Estimator</h2>
       {bookings ? (
         <div>
           <h2>Bookings</h2>
@@ -147,6 +151,7 @@ function Dashboard(props) {
                 <th>Booked Time</th>
                 <th>Assigned Employee</th>
                 <th>Estimate Completed</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -158,24 +163,24 @@ function Dashboard(props) {
                     <td>{current.requestTime}</td>
                     <td>{current.employeeName}</td>
                     <td>{String(current.completed)}</td>
-                    <td></td>
+                    <td>
+                      <button
+                        onClick={(e) =>
+                          createQuote(e, current.bookingId, current.clientId)
+                        }
+                      >
+                        Create a Quote
+                      </button>
+                    </td>
                   </tr>
                 );
               })}
             </tbody>
           </Table>
-          <div>
-            <button onClick={(e) => submitHandler(e, props.clientId)}>
-              Create another booking
-            </button>
-          </div>
         </div>
       ) : (
         <div>
-          <h3>You currently have No bookings</h3>
-          <button onClick={(e) => submitHandler(e, props.clientId)}>
-            Create a booking
-          </button>
+          <h3>You currently have No bookings scheduled</h3>
         </div>
       )}
       <br />
@@ -249,11 +254,11 @@ function Dashboard(props) {
         </div>
       ) : (
         <div>
-          <h4>You currently have No quotes</h4>
+          <h4>You currently have No open quotes</h4>
         </div>
       )}
     </div>
   );
 }
 
-export default Dashboard;
+export default DashboardEstimator;

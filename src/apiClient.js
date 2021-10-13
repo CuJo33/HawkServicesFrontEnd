@@ -41,6 +41,10 @@ export class ApiClient {
     return this.apiCall("get", `${url}rooms/${id}`);
   }
 
+  getClients(id) {
+    return this.apiCall("get", `${url}clients/${id}`);
+  }
+
   getServices(id) {
     return this.apiCall("get", `${url}services/${id}`);
   }
@@ -59,6 +63,11 @@ export class ApiClient {
 
   getBookings(id) {
     return this.apiCall("get", `${url}booking/${id}`);
+  }
+
+  updateBookings(bookingId, employeeId) {
+    console.log("in api, bookingId ", bookingId, " employeeId ", employeeId);
+    return this.apiCall("put", `${url}booking/${bookingId}/${employeeId}`);
   }
 
   getBookingsEmployee(id) {

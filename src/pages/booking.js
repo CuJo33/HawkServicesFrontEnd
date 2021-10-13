@@ -28,17 +28,24 @@ function Booking(props) {
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
 
-  // const refreshBookings = (id) => {
-  //   props.client.getBookings().then((response) => cBookings(response.data));
-  // };
+  const autoFillBookings = (id) => {
+    console.log("within autofill");
+    props.client
+      .getClients(props.clientId)
+      .then((response) => {
+        cFirstName(response.data.firstName);
+        cSurname(response.data.surname);
+        cAddressLine1(response.data.addressLine1);
+        cAddressLine2(response.data.addressLine2);
+        cPostCode(response.data.postCode);
+        cTelephoneNumber(response.data.telephoneNumber);
+      })
+      .catch((e) => {
+        alert(e);
+        cDisabled(false);
+      });
+  };
 
-  // const returnBookings = () => {
-  //   return bookings.map((current) => {
-  //     return (
-  //       <option value={current.serviceName}>{current.fullServiceName}</option>
-  //     );
-  //   });
-  // };\
   let roundTime = (time, minutesToRound) => {
     let [hours, minutes] = time.split(":");
     hours = parseInt(hours);
@@ -55,6 +62,7 @@ function Booking(props) {
   };
 
   useEffect(() => {
+    autoFillBookings(props.clientId);
     const current = new Date();
     // refreshBookings();
     const now = `${selectedDate.getHours()}:${selectedDate.getMinutes()}`;

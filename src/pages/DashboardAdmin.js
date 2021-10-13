@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Dashboard.css";
+import "../styles/DashboardAdmin.css";
 import Table from "react-bootstrap/Table";
 import { useHistory } from "react-router-dom";
 
-function Dashboard(props) {
+function DashboardAdmin(props) {
   const [disabled, cDisabled] = useState(false);
   const [bookings, cBookings] = useState([]);
+  const [employees, cEmployees] = useState([]);
   const [quotes, cQuotes] = useState([]);
   const [jobs, cJobs] = useState([]);
   const [clicked, cClicked] = useState(false);
@@ -14,7 +15,7 @@ function Dashboard(props) {
 
   const refreshBookings = async () => {
     // get all the bookings, and store it in data: [{},{}]
-    let { data } = await props.client.getBookings(props.clientId);
+    let { data } = await props.client.getBookings("-1");
     // mapping over async stuff gets tricky
     // await an array of promises, and store their resolution in data
     data = await Promise.all(
@@ -34,8 +35,7 @@ function Dashboard(props) {
   };
 
   const refreshQuotes = async (id) => {
-    let { data } = await props.client.getQuotes(props.clientId);
-
+    let { data } = await props.client.getQuotes("-1");
     if (data.length === 0) {
       cQuotes(false);
     } else {
@@ -43,9 +43,19 @@ function Dashboard(props) {
     }
   };
 
+  const refreshEmployees = async (id) => {
+    let { data } = await props.client.getEmployee("-1");
+    if (data.length === 0) {
+      cEmployees(false);
+    } else {
+      cEmployees(data);
+    }
+  };
+
   useEffect(() => {
     refreshQuotes();
     refreshBookings();
+    refreshEmployees();
   }, []);
 
   const submitHandler = (e) => {
@@ -83,15 +93,25 @@ function Dashboard(props) {
     return props.client.getJobStatusId(id);
   };
 
-  const acceptQuoteHandler = async (e, quoteId) => {
+  const returnEmployees = () => {
+    return employees.map((current, index) => {
+      return (
+        <option key={index} value={current.employeeId} name={current.username}>
+          {current.username}
+        </option>
+      );
+    });
+  };
+
+  const assignEmployee = async (e, bookingId) => {
     e.preventDefault();
-    await props.client
-      .acceptQuote(quoteId)
+    props.client
+      .updateBookings(bookingId, e.target.value)
       .then((response) => {
         if (response.data.status === 404) {
           throw new Error(response.data.message);
         } else if (response.data.status === 200) {
-          // alert("Quote accepted");
+          // alert("Quote created");
         }
         cDisabled(false);
       })
@@ -99,7 +119,7 @@ function Dashboard(props) {
         alert(e);
         cDisabled(false);
       });
-    refreshQuotes();
+    refreshBookings();
   };
 
   const clickHandler = async (e, quoteId) => {
@@ -131,11 +151,28 @@ function Dashboard(props) {
     }
   };
 
+  // const acceptQuoteHandler = (e, quoteId) => {
+  //   e.preventDefault();
+  //   props.client
+  //     .acceptQuote(quoteId)
+  //     .then((response) => {
+  //       if (response.data.status === 404) {
+  //         throw new Error(response.data.message);
+  //       } else if (response.data.status === 200) {
+  //         alert("Quote accepted");
+  //       }
+  //       cDisabled(false);
+  //     })
+  //     .catch((e) => {
+  //       alert(e);
+  //       cDisabled(false);
+  //     });
+  //   refreshQuotes();
+  // };
+
   return (
     <div>
-      <h1 style={{ marginTop: "75px" }}></h1>
-      <h2>Welcome to your Dashboard</h2>
-      <h2>Client</h2>
+      <h2>Admin</h2>
       {bookings ? (
         <div>
           <h2>Bookings</h2>
@@ -156,7 +193,15 @@ function Dashboard(props) {
                     <td>{current.bookedDate}</td>
                     <td>{current.requestDate}</td>
                     <td>{current.requestTime}</td>
-                    <td>{current.employeeName}</td>
+                    <td>
+                      {current.employeeName}{" "}
+                      <select
+                        id="employees"
+                        onChange={(e) => assignEmployee(e, current.bookingId)}
+                      >
+                        {returnEmployees()}
+                      </select>
+                    </td>
                     <td>{String(current.completed)}</td>
                     <td></td>
                   </tr>
@@ -164,18 +209,10 @@ function Dashboard(props) {
               })}
             </tbody>
           </Table>
-          <div>
-            <button onClick={(e) => submitHandler(e, props.clientId)}>
-              Create another booking
-            </button>
-          </div>
         </div>
       ) : (
         <div>
-          <h3>You currently have No bookings</h3>
-          <button onClick={(e) => submitHandler(e, props.clientId)}>
-            Create a booking
-          </button>
+          <h3>You currently have No bookings scheduled</h3>
         </div>
       )}
       <br />
@@ -206,11 +243,6 @@ function Dashboard(props) {
                     <td>{current.requestDate}</td>
                     <td>{current.employeeId}</td>
                     <td>{String(current.clientAccepted)}</td>
-                    <button
-                      onClick={(e) => acceptQuoteHandler(e, current.quoteId)}
-                    >
-                      Accept Quote
-                    </button>
                   </tr>
                 );
               })}
@@ -249,11 +281,11 @@ function Dashboard(props) {
         </div>
       ) : (
         <div>
-          <h4>You currently have No quotes</h4>
+          <h4>There are currently no quotes</h4>
         </div>
       )}
     </div>
   );
 }
 
-export default Dashboard;
+export default DashboardAdmin;

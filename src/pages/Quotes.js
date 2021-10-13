@@ -27,6 +27,7 @@ function Quotes(props) {
   };
 
   useEffect(() => {
+    console.log(props);
     refreshRooms();
     refreshServices();
   }, []);
@@ -68,8 +69,13 @@ function Quotes(props) {
 
   const createJob = (e) => {
     e.preventDefault();
+
     props.client
-      .createJob(props.clientId, e.target.rooms.value, e.target.services.value)
+      .createJob(
+        props.passedClientId,
+        e.target.rooms.value,
+        e.target.services.value
+      )
       .then((response) => {
         if (response.data.status === 404) {
           throw new Error(response.data.message);
@@ -119,9 +125,8 @@ function Quotes(props) {
     jobs.map((j) => {
       jobList.push(j.jobId);
     });
-    console.log(props.clientId, props.employeeId, jobList);
     props.client
-      .createQuote(props.clientId, props.employeeId, jobList)
+      .createQuote(props.passedClientId, props.employeeId, jobList)
       .then((response) => {
         if (response.data.status === 404) {
           throw new Error(response.data.message);
@@ -145,6 +150,7 @@ function Quotes(props) {
           <tr>
             <th>Room</th>
             <th>Service</th>
+            <th>JobId</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -155,10 +161,11 @@ function Quotes(props) {
                 <td>{current.room}</td>
                 <td>{current.service}</td>
                 <td>{current.jobId}</td>
-                <button onClick={(e) => deleteJobHandler(e, current.jobId)}>
-                  Delete Job
-                </button>
-                <td></td>
+                <td>
+                  <button onClick={(e) => deleteJobHandler(e, current.jobId)}>
+                    Delete Job
+                  </button>
+                </td>
               </tr>
             );
           })}
@@ -184,7 +191,11 @@ function Quotes(props) {
         <input type="submit" label="Create Job"></input>
       </form>
 
-      <button type="submit" onClick={(e) => submitHandler(e)}>
+      <button
+        type="submit"
+        style={{ paddingBottom: "200px" }}
+        onClick={(e) => submitHandler(e)}
+      >
         Submit Quote
       </button>
     </div>

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import "../styles/DashboardEmployee.css";
+import "../styles/DashboardStaff.css";
 import Table from "react-bootstrap/Table";
 import { useHistory } from "react-router-dom";
-import DashboardAdmin from "./DashboardAdmin";
-import DashboardEstimator from "./DashboardEstimator";
-import DashboardStaff from "./DashboardStaff";
 
-function DashboardEmployee(props) {
+function DashboardStaff(props) {
   const [disabled, cDisabled] = useState(false);
   const [bookings, cBookings] = useState([]);
   const [quotes, cQuotes] = useState([]);
@@ -135,40 +132,9 @@ function DashboardEmployee(props) {
 
   return (
     <div>
-      <h1 style={{ marginTop: "75px" }}></h1>
-      <h2>Welcome to your Dashboard</h2>
-      {props.employeeRole === "estimator" ? (
-        <DashboardEstimator
-          client={props.client}
-          token={props.token}
-          clientId={props.clientId}
-          clientChanger={(passedClientId) => {
-            props.clientChanger(passedClientId);
-          }}
-          employeeId={props.employeeId}
-          employeeRole={props.employeeRole}
-        />
-      ) : props.employeeRole === "staff" ? (
-        <DashboardStaff
-          client={props.client}
-          token={props.token}
-          clientId={props.clientId}
-          employeeId={props.employeeId}
-          employeeRole={props.employeeRole}
-        />
-      ) : props.employeeRole === "admin" ? (
-        <DashboardAdmin
-          client={props.client}
-          token={props.token}
-          clientId={props.clientId}
-          employeeId={props.employeeId}
-          employeeRole={props.employeeRole}
-        />
-      ) : (
-        "nothing"
-      )}
+      <h2>Staff</h2>
     </div>
   );
 }
 
-export default DashboardEmployee;
+export default DashboardStaff;
