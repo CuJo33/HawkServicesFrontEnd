@@ -8,6 +8,7 @@ function DashboardStaff(props) {
   const [bookings, cBookings] = useState([]);
   const [quotes, cQuotes] = useState([]);
   const [jobs, cJobs] = useState([]);
+  const [jobStatus, cJobStatus] = useState([]);
   const [clicked, cClicked] = useState(false);
 
   const history = useHistory();
@@ -33,6 +34,15 @@ function DashboardStaff(props) {
     }
   };
 
+  const refreshJobStatus = async (id) => {
+    let { data } = await props.client.getJobStatusId("-1");
+    if (data.length === 0) {
+      cJobStatus(false);
+    } else {
+      cJobStatus(data);
+    }
+  };
+
   const refreshQuotes = async (id) => {
     let { data } = await props.client.getQuotesEmployee(props.employeeId);
     if (data.length === 0) {
@@ -42,9 +52,39 @@ function DashboardStaff(props) {
     }
   };
 
+  const refreshJobs = async (id) => {
+    let { data } = await props.client.getJobsByEmployeeId(props.employeeId);
+    data = await Promise.all(
+      // map over jobs
+      data.map(async (v, i) => {
+        // get room name (async)
+        const res1 = await getRooms(v.roomId);
+        const res2 = await getServices(v.serviceId);
+        const res3 = await getJobStatusId(v.jobStatusId);
+        const res4 = await getEmployee(v.employeeId);
+        const res5 = await getClients(v.clientId);
+        // make a new object, duplicate of jobs with new feild, roomName
+        return {
+          ...v,
+          roomName: res1.data.fullRoomName,
+          serviceName: res2.data.fullServiceName,
+          jobStatusName: res3.data.fullJobStatusName,
+          employeeName: res4.data.username,
+          firstName: res5.data.firstName,
+          surname: res5.data.surname,
+        };
+      })
+    );
+    if (data.length === 0) {
+      cJobs(false);
+    } else {
+      cJobs(data);
+    }
+  };
+
   useEffect(() => {
-    refreshQuotes();
-    refreshBookings();
+    refreshJobs();
+    refreshJobStatus();
   }, []);
 
   const submitHandler = (e) => {
@@ -80,6 +120,10 @@ function DashboardStaff(props) {
 
   const getJobStatusId = (id) => {
     return props.client.getJobStatusId(id);
+  };
+
+  const getClients = (id) => {
+    return props.client.getClients(id);
   };
 
   const acceptQuoteHandler = (e, quoteId) => {
@@ -130,9 +174,153 @@ function DashboardStaff(props) {
     }
   };
 
+  const returnJobStatus = () => {
+    return jobStatus.map((current, index) => {
+      // console.log(" current ", current, "bookings", bookings, index);
+      return (
+        <option
+          key={index}
+          value={current.jobStatusId}
+          name={current.jobStatusName}
+        >
+          {current.fullJobStatusName}
+        </option>
+      );
+    });
+  };
+
+  const updateJobStatus = async (e, jobId) => {
+    e.preventDefault();
+    await props.client
+      .updateJobStatus(jobId, e.target.value)
+      .then((response) => {
+        if (response.data.status === 404) {
+          throw new Error(response.data.message);
+        } else if (response.data.status === 200) {
+          // alert("Quote created");
+        }
+        cDisabled(false);
+      })
+      .catch((e) => {
+        alert(e);
+        cDisabled(false);
+      });
+    if (e.target.value === "6168104912eefab8c04cb038") {
+      await props.client
+        .updateStartDate(jobId, e.target.value)
+        .then((response) => {
+          if (response.data.status === 404) {
+            throw new Error(response.data.message);
+          } else if (response.data.status === 200) {
+            // alert("Quote created");
+          }
+          cDisabled(false);
+        })
+        .catch((e) => {
+          alert(e);
+          cDisabled(false);
+        });
+    }
+    if (e.target.value === "6168116112eefab8c04cb03a") {
+      await props.client
+        .updateCompleteDate(jobId, e.target.value)
+        .then((response) => {
+          if (response.data.status === 404) {
+            throw new Error(response.data.message);
+          } else if (response.data.status === 200) {
+            // alert("Quote created");
+          }
+          cDisabled(false);
+        })
+        .catch((e) => {
+          alert(e);
+          cDisabled(false);
+        });
+    }
+    refreshJobs();
+  };
+
+  const datify = (date) => {
+    console.log(date);
+    if (!date) {
+      return "";
+    }
+    let ret = new Date(date);
+    let month =
+      ret.getMonth() < 10 ? `0${ret.getMonth()}` : `${ret.getMonth()}`;
+    let day = ret.getDay() < 10 ? `0${ret.getDay()}` : `${ret.getDay()}`;
+    ret = `${ret.getFullYear()}/${month}/${day}`;
+    return ret;
+  };
+
   return (
     <div>
       <h2>Staff</h2>
+      {jobs ? (
+        <div>
+          <h2>Jobs</h2>
+          <Table>
+            <thead>
+              <tr>
+                <th>Job Id</th>
+                <th>Client Name</th>
+                <th>Assigned Employee</th>
+                <th>Room</th>
+                <th>Service</th>
+                <th>Job Status</th>
+                <th>Start Date</th>
+                <th>Estimated Completion Date</th>
+                <th>Completed Date</th>
+                <th>Client Sign Off</th>
+                <th>Sign Off Date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {jobs.map((current, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{current.jobId}</td>
+                    <td>
+                      {current.firstName} {current.surname}
+                    </td>
+                    <td>{current.employeeName}</td>
+                    <td>{current.roomName}</td>
+                    <td>{current.serviceName}</td>
+                    <td>
+                      {current.jobStatusName}{" "}
+                      <select
+                        id="jobStatus"
+                        onChange={(e) => updateJobStatus(e, current.jobId)}
+                      >
+                        {returnJobStatus()}
+                      </select>
+                    </td>
+                    <td>{datify(current.startDate)}</td>
+                    <td>{datify(current.estimatedCompletionDate)}</td>
+                    <td>{datify(current.completedDate)}</td>
+                    <td>{String(current.clientSignOff)}</td>
+                    <td>{datify(current.clientSignOffDate)}</td>
+                    <td>
+                      {/* <button
+                        onClick={(e) =>
+                          createQuote(e, current.bookingId, current.clientId)
+                        }
+                      >
+                        Create a Quote
+                      </button> */}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </div>
+      ) : (
+        <div>
+          <h3>You currently have No Jobs scheduled</h3>
+        </div>
+      )}
     </div>
   );
 }

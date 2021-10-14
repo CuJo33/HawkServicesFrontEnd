@@ -18,7 +18,6 @@ export class ApiClient {
       },
       data,
     }).catch((error) => {
-      console.log(error);
       if (error.response.status === 403) {
         this.logoutHandler();
         return Promise.reject();
@@ -66,8 +65,11 @@ export class ApiClient {
   }
 
   updateBookings(bookingId, employeeId) {
-    console.log("in api, bookingId ", bookingId, " employeeId ", employeeId);
     return this.apiCall("put", `${url}booking/${bookingId}/${employeeId}`);
+  }
+
+  updateJobStatus(jobId, jobStatusId) {
+    return this.apiCall("put", `${url}jobStatus/${jobId}/${jobStatusId}`);
   }
 
   getBookingsEmployee(id) {
@@ -78,8 +80,32 @@ export class ApiClient {
     return this.apiCall("get", `${url}employee/${id}`);
   }
 
+  getJobsByQuoteId(id) {
+    return this.apiCall("get", `${url}jobsByQuoteId/${id}`);
+  }
+
+  getJobsByEmployeeId(id) {
+    return this.apiCall("get", `${url}jobsByEmployeeId/${id}`);
+  }
+
   getJobs(id) {
     return this.apiCall("get", `${url}jobs/${id}`);
+  }
+
+  updateStartDate(id) {
+    return this.apiCall("put", `${url}jobsStartDate/${id}`);
+  }
+
+  updateCompleteDate(id) {
+    return this.apiCall("put", `${url}jobsCompleteDate/${id}`);
+  }
+
+  updateJobs(jobId, employeeId) {
+    return this.apiCall("put", `${url}jobs/${jobId}/${employeeId}`);
+  }
+
+  updateJobSignOff(jobId) {
+    return this.apiCall("put", `${url}jobsSignOff/${jobId}`);
   }
 
   createBooking(
@@ -123,7 +149,6 @@ export class ApiClient {
   }
 
   acceptQuote(quoteId) {
-    console.log("hit api");
     return this.apiCall("put", `${url}quote/${quoteId}`);
   }
 
@@ -141,7 +166,6 @@ export class ApiClient {
   }
 
   addEvent(eventName, location, description, imageLink, date, time) {
-    console.log(time);
     return this.apiCall("post", url, {
       eventName,
       location,

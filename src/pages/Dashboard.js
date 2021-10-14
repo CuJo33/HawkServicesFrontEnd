@@ -7,6 +7,7 @@ function Dashboard(props) {
   const [disabled, cDisabled] = useState(false);
   const [bookings, cBookings] = useState([]);
   const [quotes, cQuotes] = useState([]);
+  const [quoteId, cQuoteId] = useState(undefined);
   const [jobs, cJobs] = useState([]);
   const [clicked, cClicked] = useState(false);
 
@@ -35,12 +36,53 @@ function Dashboard(props) {
 
   const refreshQuotes = async (id) => {
     let { data } = await props.client.getQuotes(props.clientId);
-
+    data = await Promise.all(
+      // map over booking
+      data.map(async (v, i) => {
+        // get employee name (async)
+        const res = await getEmployee(v.employeeId);
+        // make a new object, duplicate of booking with new feild, employeeName
+        return { ...v, employeeName: res.data.username };
+      })
+    );
     if (data.length === 0) {
       cQuotes(false);
     } else {
       cQuotes(data);
     }
+  };
+
+  const refreshJobs = async (id) => {
+    let { data } = await props.client.getJobsByQuoteId(quoteId);
+    data = await Promise.all(
+      // map over jobs
+      data.map(async (v, i) => {
+        // get room name (async)
+        const res1 = await getRooms(v.roomId);
+        const res2 = await getServices(v.serviceId);
+        const res3 = await getJobStatusId(v.jobStatusId);
+        const res4 = await getEmployee(v.employeeId);
+        const res5 = await getClients(v.clientId);
+        // make a new object, duplicate of jobs with new feild, roomName
+        return {
+          ...v,
+          roomName: res1.data.fullRoomName,
+          serviceName: res2.data.fullServiceName,
+          jobStatusName: res3.data.fullJobStatusName,
+          employeeName: res4.data.username,
+          firstName: res5.data.firstName,
+          surname: res5.data.surname,
+        };
+      })
+    );
+    if (data.length === 0) {
+      cJobs(false);
+    } else {
+      cJobs(data);
+    }
+  };
+  const getClients = (id) => {
+    return props.client.getClients(id);
   };
 
   useEffect(() => {
@@ -105,7 +147,8 @@ function Dashboard(props) {
   const clickHandler = async (e, quoteId) => {
     if (!clicked) {
       cClicked(!clicked);
-      let { data } = await props.client.getJobs(quoteId);
+      cQuoteId(quoteId);
+      let { data } = await props.client.getJobsByQuoteId(quoteId);
       data = await Promise.all(
         // map over jobs
         data.map(async (v, i) => {
@@ -128,7 +171,40 @@ function Dashboard(props) {
       await cJobs(data);
     } else {
       cClicked(!clicked);
+      cQuoteId(undefined);
     }
+  };
+
+  const updateSignOff = async (e, jobId, quoteId) => {
+    e.preventDefault();
+    await props.client
+      .updateJobSignOff(jobId)
+      .then((response) => {
+        if (response.data.status === 404) {
+          throw new Error(response.data.message);
+        } else if (response.data.status === 200) {
+          // alert("Quote created");
+        }
+        cDisabled(false);
+      })
+      .catch((e) => {
+        alert(e);
+        cDisabled(false);
+      });
+    refreshJobs();
+  };
+
+  const datify = (date) => {
+    console.log(date);
+    if (!date) {
+      return "";
+    }
+    let ret = new Date(date);
+    let month =
+      ret.getMonth() < 10 ? `0${ret.getMonth()}` : `${ret.getMonth()}`;
+    let day = ret.getDay() < 10 ? `0${ret.getDay()}` : `${ret.getDay()}`;
+    ret = `${ret.getFullYear()}/${month}/${day}`;
+    return ret;
   };
 
   return (
@@ -153,7 +229,7 @@ function Dashboard(props) {
               {bookings.map((current, index) => {
                 return (
                   <tr key={index}>
-                    <td>{current.bookedDate}</td>
+                    <td>{datify(current.bookedDate)}</td>
                     <td>{current.requestDate}</td>
                     <td>{current.requestTime}</td>
                     <td>{current.employeeName}</td>
@@ -203,8 +279,8 @@ function Dashboard(props) {
                         See Job List
                       </button>
                     </td>
-                    <td>{current.requestDate}</td>
-                    <td>{current.employeeId}</td>
+                    <td>{datify(current.requestDate)}</td>
+                    <td>{current.employeeName}</td>
                     <td>{String(current.clientAccepted)}</td>
                     <button
                       onClick={(e) => acceptQuoteHandler(e, current.quoteId)}
@@ -237,7 +313,20 @@ function Dashboard(props) {
                       <td>{current.serviceName}</td>
                       <td>{current.jobStatusName}</td>
                       <td>{current.employeeName}</td>
-                      <td>{String(current.clientSignOff)}</td>
+                      <td>
+                        {String(current.clientSignOff)}
+                        {current.jobStatusName === "Awaiting Sign Off" ? (
+                          <button
+                            onClick={(e) =>
+                              updateSignOff(e, current.jobId, quoteId)
+                            }
+                          >
+                            Sign Off Work
+                          </button>
+                        ) : (
+                          <div></div>
+                        )}
+                      </td>
                     </tr>
                   );
                 })}
