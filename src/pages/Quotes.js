@@ -142,7 +142,7 @@ function Quotes(props) {
         alert(e);
         cDisabled(false);
       });
-    history.push("/dashboardEstimator");
+    history.push("/dashboardEmployee");
   };
 
   return (
