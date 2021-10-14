@@ -280,7 +280,10 @@ function Dashboard(props) {
                   <tr key={index}>
                     <td>{current.quoteId}</td>
                     <td>
-                      <button onClick={(e) => clickHandler(e, current.quoteId)}>
+                      <button
+                        className="seeJob"
+                        onClick={(e) => clickHandler(e, current.quoteId)}
+                      >
                         See Job List
                       </button>
                     </td>
@@ -288,6 +291,7 @@ function Dashboard(props) {
                     <td>{current.employeeName}</td>
                     <td>{String(current.clientAccepted)}</td>
                     <button
+                      className="acceptQuote"
                       onClick={(e) => acceptQuoteHandler(e, current.quoteId)}
                     >
                       Accept Quote

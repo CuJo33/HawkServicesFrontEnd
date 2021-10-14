@@ -44,6 +44,7 @@ function SignUp(props) {
 
   return (
     <>
+      <br />
       <form className="signup-form" onSubmit={(e) => submitHandler(e)}>
         <h4>Sign Up</h4>
         <br />

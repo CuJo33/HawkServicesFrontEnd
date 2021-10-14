@@ -296,7 +296,10 @@ function DashboardAdmin(props) {
                   <tr key={index}>
                     <td>{current.quoteId}</td>
                     <td>
-                      <button onClick={(e) => clickHandler(e, current.quoteId)}>
+                      <button
+                        className="seeJob"
+                        onClick={(e) => clickHandler(e, current.quoteId)}
+                      >
                         See Job List
                       </button>
                     </td>
