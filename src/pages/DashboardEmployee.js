@@ -134,8 +134,7 @@ function DashboardEmployee(props) {
   };
 
   return (
-    <div>
-      <h1 style={{ marginTop: "75px" }}></h1>
+    <div className="dashboard-employee">
       <h2>Welcome to your Dashboard</h2>
       {props.employeeRole === "estimator" ? (
         <DashboardEstimator

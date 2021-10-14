@@ -138,7 +138,7 @@ function DashboardEstimator(props) {
   };
 
   return (
-    <div>
+    <div className="dashboard-estimator">
       <h2>Estimator</h2>
       {bookings ? (
         <div>
@@ -165,6 +165,7 @@ function DashboardEstimator(props) {
                     <td>{String(current.completed)}</td>
                     <td>
                       <button
+                        className="create-quote"
                         onClick={(e) =>
                           createQuote(e, current.bookingId, current.clientId)
                         }
@@ -204,7 +205,10 @@ function DashboardEstimator(props) {
                   <tr key={index}>
                     <td>{current.quoteId}</td>
                     <td>
-                      <button onClick={(e) => clickHandler(e, current.quoteId)}>
+                      <button
+                        className="create-quote"
+                        onClick={(e) => clickHandler(e, current.quoteId)}
+                      >
                         See Job List
                       </button>
                     </td>

@@ -131,7 +131,7 @@ function DashboardStaff(props) {
   };
 
   return (
-    <div>
+    <div className="dashboard-staff">
       <h2>Staff</h2>
     </div>
   );

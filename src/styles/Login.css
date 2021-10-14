@@ -11,8 +11,9 @@
   border: none;
   border-bottom: 1px solid lightgray;
   outline: none;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-size: 18px;
+  font-weight: 400;
 }
 .login-button {
   padding: 8px 16px;
@@ -21,7 +22,7 @@
   background-color: rgb(18, 119, 114);
   color: white;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
 }
 .login-button:hover {
   background-color: white;

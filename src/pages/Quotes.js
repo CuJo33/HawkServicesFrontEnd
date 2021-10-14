@@ -142,8 +142,8 @@ function Quotes(props) {
   };
 
   return (
-    <div>
-      <h1 style={{ marginTop: "75px" }}>New Quote</h1>
+    <div className="quotes-page">
+      <h2>New Quote</h2>
       <h2>Jobs</h2>
       <Table>
         <thead>
@@ -162,7 +162,10 @@ function Quotes(props) {
                 <td>{current.service}</td>
                 <td>{current.jobId}</td>
                 <td>
-                  <button onClick={(e) => deleteJobHandler(e, current.jobId)}>
+                  <button
+                    className="delete-job"
+                    onClick={(e) => deleteJobHandler(e, current.jobId)}
+                  >
                     Delete Job
                   </button>
                 </td>
@@ -171,10 +174,8 @@ function Quotes(props) {
           })}
         </tbody>
       </Table>
-      <br />
-      <br />
       <h2>Add a Job</h2>
-      <form onSubmit={(e) => createJob(e)}>
+      <form className="quotes-form" onSubmit={(e) => createJob(e)}>
         {/* map over state array to display all the jobs in the current quote. */}
         <label id="roomLabel" htmlFor="rooms">
           Choose a Room:
@@ -190,14 +191,10 @@ function Quotes(props) {
         </select>
         <input type="submit" label="Create Job"></input>
       </form>
-
-      <button
-        type="submit"
-        style={{ paddingBottom: "200px" }}
-        onClick={(e) => submitHandler(e)}
-      >
+      <button id="submit-quote" type="submit" onClick={(e) => submitHandler(e)}>
         Submit Quote
       </button>
+      <br />
     </div>
   );
 }
