@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Quotes.css";
 import Table from "react-bootstrap/Table";
+import { useHistory } from "react-router-dom";
 
 function Quotes(props) {
   const [disabled, cDisabled] = useState(false);
@@ -10,6 +11,8 @@ function Quotes(props) {
   const [formService, cFormService] = useState();
   const [formRoom, cFormRoom] = useState();
   const [clicked, cClicked] = useState(false);
+
+  const history = useHistory();
 
   const refreshServices = (id) => {
     props.client.getServices("-1").then((response) => {
@@ -27,7 +30,7 @@ function Quotes(props) {
   };
 
   useEffect(() => {
-    console.log(props);
+    // console.log(props);
     refreshRooms();
     refreshServices();
   }, []);
@@ -139,6 +142,7 @@ function Quotes(props) {
         alert(e);
         cDisabled(false);
       });
+    history.push("/dashboardEstimator");
   };
 
   return (

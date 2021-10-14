@@ -149,6 +149,19 @@ function DashboardEstimator(props) {
     }
   };
 
+  const datify = (date) => {
+    console.log(date);
+    if (!date) {
+      return "";
+    }
+    let ret = new Date(date);
+    let month =
+      ret.getMonth() < 10 ? `0${ret.getMonth()}` : `${ret.getMonth()}`;
+    let day = ret.getDay() < 10 ? `0${ret.getDay()}` : `${ret.getDay()}`;
+    ret = `${ret.getFullYear()}/${month}/${day}`;
+    return ret;
+  };
+
   return (
     <div>
       <h2>Estimator</h2>
@@ -170,7 +183,7 @@ function DashboardEstimator(props) {
               {bookings.map((current, index) => {
                 return (
                   <tr key={index}>
-                    <td>{current.bookedDate}</td>
+                    <td>{datify(current.bookedDate)}</td>
                     <td>{current.requestDate}</td>
                     <td>{current.requestTime}</td>
                     <td>{current.employeeName}</td>
@@ -220,7 +233,7 @@ function DashboardEstimator(props) {
                         See Job List
                       </button>
                     </td>
-                    <td>{current.requestDate}</td>
+                    <td>{datify(current.requestDate)}</td>
                     <td>{current.employeeName}</td>
                     <td>{String(current.clientAccepted)}</td>
                   </tr>
