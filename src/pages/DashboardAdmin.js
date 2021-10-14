@@ -231,7 +231,7 @@ function DashboardAdmin(props) {
   // };
 
   return (
-    <div>
+    <div className="dashboard-admin">
       <h2>Admin</h2>
       {bookings ? (
         <div>

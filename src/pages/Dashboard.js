@@ -208,8 +208,7 @@ function Dashboard(props) {
   };
 
   return (
-    <div>
-      <h1 style={{ marginTop: "75px" }}></h1>
+    <div className="dashboard">
       <h2>Welcome to your Dashboard</h2>
       <h2>Client</h2>
       {bookings ? (
@@ -241,15 +240,21 @@ function Dashboard(props) {
             </tbody>
           </Table>
           <div>
-            <button onClick={(e) => submitHandler(e, props.clientId)}>
+            <button
+              className="dashboard-button"
+              onClick={(e) => submitHandler(e, props.clientId)}
+            >
               Create another booking
             </button>
           </div>
         </div>
       ) : (
-        <div>
+        <div className="create-booking">
           <h3>You currently have No bookings</h3>
-          <button onClick={(e) => submitHandler(e, props.clientId)}>
+          <button
+            className="dashboard-button"
+            onClick={(e) => submitHandler(e, props.clientId)}
+          >
             Create a booking
           </button>
         </div>

@@ -1,91 +1,36 @@
-.nav-container {
-  position: fixed;
+.navbar {
+  background-color: rgba(0, 128, 128, 0.685) !important;
+  height: 10vh;
+  position: absolute;
   top: 0;
-  width: 100%;
-  height: 75px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 128, 128, 0.993);
-  z-index: 999;
 }
-.left-side {
-  flex: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.left-side > img {
+.logo {
   width: 100px;
   height: 100px;
-  object-fit: cover;
+  padding-top: 10px;
 }
-.right-side {
-  flex: 8;
-  display: flex;
-  align-items: center;
+.nav-list {
+  display: flex !important;
+  align-items: flex-start;
   justify-content: center;
+  justify-content: space-around;
+  border-radius: 5px;
+  z-index: 1;
 }
-
-ul a {
-  margin-right: 20px;
-  font-size: 20px;
-  text-transform: uppercase;
-  color: #f1f1f1;
-  cursor: pointer;
+.nav-list a {
+  color: white !important;
+  font-size: 24px;
+  font-weight: 100;
   text-decoration: none;
+  margin-left: 20px;
+  padding: 6px 10px;
 }
-ul a:hover {
-  border-bottom: 1px solid white;
-  color: lightgray;
+.nav-list a:hover {
+  border-bottom: 0.3px solid white;
 }
-.login {
-  flex: 2;
-  justify-content: center;
-  align-items: center;
-}
-.list-login {
-  display: flexbox;
-  align-items: center;
-  justify-content: center;
-}
-.list-login a {
-  border: 1px solid lightgray;
-  padding: 3px 6px;
-  border-radius: 6px;
-}
-.list-login a:hover {
-  background-color: white;
-  border: 1px solid teal;
-  color: teal;
-}
-.btn {
-  display: none;
-  position: absolute;
-  right: 10px;
-  top: 7px;
-  padding: 5px;
-}
-.toggle {
-  color: white;
-}
-@media screen and (max-width: 500px) {
-  .list {
-    flex-direction: column;
-    height: auto;
-  }
-  .items:nth-child(1) {
-    border-top: 1px solid rgba(255, 255, 255, 0.555);
-    margin-top: 50px;
-  }
-  .items {
-    width: 100%;
-    border-top: 1px solid rgba(255, 255, 255, 0.555);
-    text-align: center;
-    margin-right: 0px;
-    padding: 20px 0;
-  }
-  .btn {
-    display: block;
+@media only screen and (max-width: 600px) {
+  .nav-list {
+    background-color: rgba(0, 0, 0, 0.644);
   }
 }

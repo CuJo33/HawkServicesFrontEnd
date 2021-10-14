@@ -1,8 +1,17 @@
 import React from "react";
 import PhoneLeft from "../assets/phone.jpg";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "../styles/Contact.css";
 
+toast.configure();
+
 function Contact() {
+  const Notify = () => {
+    toast.success("Your message has been sent!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
   return (
     <div className="contact">
       <div
@@ -11,7 +20,6 @@ function Contact() {
       ></div>
       <div className="rightSide">
         <h1> Contact Us</h1>
-
         <form id="contact-form" method="POST">
           <label className="label" htmlFor="name">
             Full Name
@@ -40,7 +48,10 @@ function Contact() {
             name="message"
             required
           ></textarea>
-          <button type="submit"> Send Message</button>
+          <button className="submit-button" onClick={Notify} type="reset">
+            {" "}
+            Send Message
+          </button>
         </form>
       </div>
     </div>

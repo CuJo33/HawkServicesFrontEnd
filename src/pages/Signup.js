@@ -45,7 +45,6 @@ function SignUp(props) {
   return (
     <>
       <form className="signup-form" onSubmit={(e) => submitHandler(e)}>
-        <br />
         <h4>Sign Up</h4>
         <br />
         <input
@@ -76,11 +75,10 @@ function SignUp(props) {
         />
         <br />
         <br />
-        <button class="signup-button" type="submit" disabled={disabled}>
-          {" "}
-          Submit{" "}
+        <button id="signup-button" type="submit" disabled={disabled}>
+          Submit
         </button>
-        <br />
+
         <p>
           If you already have an account{" "}
           <Link to="/login"> please click here to login </Link>{" "}
